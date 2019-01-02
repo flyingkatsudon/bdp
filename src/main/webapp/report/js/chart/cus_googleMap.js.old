@@ -1,0 +1,71 @@
+function makerClickAction(t) {
+	window.open(t.text, "", "width=1200,height=600");
+}
+
+$(document).ready(function() {
+	
+(function() {
+	var cusMap = function() {
+		this.mapDataArr = [];
+	};
+	
+	cusMap.prototype = {
+		addMarker: function(mapDataArr, map) {
+			var myLatLng={lat:mapDataArr.lat , lng:mapDataArr.lng};
+			
+			var marker = new google.maps.Marker({
+				position: myLatLng,
+				map: map
+			});
+					  
+			var infowindow = new google.maps.InfoWindow({
+			    content: "<a onclick='makerClickAction(this)'>" + mapDataArr.content + "</div>"
+			});
+		  
+			marker.addListener('click', function() {
+		  	infowindow.open(map, marker);
+		  });
+		
+		},
+			
+		setData: function(mapDataset) {
+			var mapDataArr = [];
+			var center={lat: 37.5638369, lng: 126.9862784};
+			
+			for(var i = 0; i < 50; i++) {
+				mapDataArr.push({content: mapDataset.data[i].docUid, lat: mapDataset.data[i].lat, lng: mapDataset.data[i].lon});
+			}
+			
+			this.mapDataArr = mapDataArr; 
+			this.center = center;
+	
+			return this;
+		},
+		
+		onDrawChart: function() {
+			var that = this;
+			var mapDataArr = that.mapDataArr;
+			var center = that.center;//ShinhanCard Head
+			
+			var myMap=document.getElementById("googleMap");
+			
+			var mapOption = {
+					center: center,
+					zoom: 12, // control size of zoom-map; (ex) 8-South Korea, 12-Seoul, 15-Seoul Jung-gu
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+			}
+			// Draw map
+			var map = new google.maps.Map(myMap, mapOption);
+			
+			// Add markers
+			for(var i=0; i< mapDataArr.length; i++) {
+				window.SDII.Chart.cusMap.prototype.addMarker(mapDataArr[i], map);
+			}
+	
+		}
+	};
+	
+	window.SDII.Chart.cusMap = window.SDII.Chart.cusMap || cusMap;
+	
+})(window);
+});
