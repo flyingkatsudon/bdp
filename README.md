@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CBoard
 #### An **open** BI Dashboard platform that supports **interactive** multi-dimensional report design and data analysis  
 Server side framework is Spring+MyBatis and front-end is based on AngularJS1 and Bootstrap. The whole architecture graphic is as below:   
@@ -221,3 +222,7 @@ You can check in at this issue page [https://github.com/TuiQiao/CBoard/issues/12
         - What version of the product are you using? On what operating system?（你正在使用产品的哪个版本？在什么操作系统上？）
         - Please provide any additional information below.（如果有的话，请在下面提供更多信息。）
     - 最后喊个口号，开源项目的健康发展需要大家共同的努力，“众人拾柴火焰高”，“人人为我，我为人人”，让我们共同努力打造一个免费好用的开源分析平台
+=======
+# bdp
+
+>>>>>>> refs/remotes/origin/master
