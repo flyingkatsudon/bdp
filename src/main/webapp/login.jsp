@@ -108,6 +108,10 @@ $(document).ready(function(){
 
 	  }
 	}
+	
+	$('input[type=submit]').click(function(){
+		
+	});
 });
 </script>
 </head>
@@ -124,11 +128,6 @@ $(document).ready(function(){
 			<form action="/bdp/process" method="post">
 				<div class="form-group has-feedback">
 					<select id="businessCode" class="form-control" name="v0">
-						<!-- <option value="SH">신한은행</option>
-						<option value="LC">신한카드</option>
-						<option value="GS">신한금융투자</option>
-						<option value="SL">신한생명</option>
-						<option value="SY">신한DS</option> -->
 					</select>
 				</div>
 				<div class="form-group has-feedback">

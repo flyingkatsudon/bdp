@@ -675,10 +675,10 @@
 				FROM	
 					(SELECT
 						DISTINCT 
-						'질병' as kwd_a
-						, ktc.kwd_b
-						, ktc.doc_date
-						, ktc.doc_cnt_both
+                       	'질병' as kwd_a
+                        , ktc.kwd_a as kwd_b
+                        , ktc.doc_date
+                        , sum(ktc.doc_cnt_both) over(partition by ktc.kwd_a, ktc.doc_date) as doc_cnt_both
 						, dpd.pos_count as pos_cnt_both
                     	, dpd.neg_count as neg_cnt_both
                     	, dpd.neu_count as neu_cnt_both
@@ -726,10 +726,10 @@
 				FROM	
 					(SELECT
 						DISTINCT 
-						'질병' as kwd_a
-						, ktc.kwd_b
-						, ktc.doc_date
-						, ktc.doc_cnt_both
+                        '질병' as kwd_a
+                        , ktc.kwd_a as kwd_b
+                        , ktc.doc_date
+                        , sum(ktc.doc_cnt_both) over(partition by ktc.kwd_a, ktc.doc_date) as doc_cnt_both
 						, dpd.pos_count as pos_cnt_both
                     	, dpd.neg_count as neg_cnt_both
                     	, dpd.neu_count as neu_cnt_both
@@ -776,10 +776,10 @@
 				FROM	
 					(SELECT
 						DISTINCT 
-						'질병' as kwd_a
-						, ktc.kwd_b
-						, ktc.doc_date
-						, ktc.doc_cnt_both
+                        '질병' as kwd_a
+                        , ktc.kwd_a as kwd_b
+                        , ktc.doc_date
+                        , sum(ktc.doc_cnt_both) over(partition by ktc.kwd_a, ktc.doc_date) as doc_cnt_both
 						, dpd.pos_count as pos_cnt_both
                     	, dpd.neg_count as neg_cnt_both
                     	, dpd.neu_count as neu_cnt_both
@@ -825,10 +825,10 @@
 				FROM	
 					(SELECT
 						DISTINCT 
-						'질병' as kwd_a
-						, ktc.kwd_b
-						, ktc.doc_date
-						, ktc.doc_cnt_both
+                        '질병' as kwd_a
+                        , ktc.kwd_a as kwd_b
+                        , ktc.doc_date
+                        , sum(ktc.doc_cnt_both) over(partition by ktc.kwd_a, ktc.doc_date) as doc_cnt_both
 						, dpd.pos_count as pos_cnt_both
                     	, dpd.neg_count as neg_cnt_both
                     	, dpd.neu_count as neu_cnt_both
@@ -874,10 +874,10 @@
 				FROM	
 					(SELECT
 						DISTINCT 
-						'질병' as kwd_a
-						, ktc.kwd_b
-						, ktc.doc_date
-						, ktc.doc_cnt_both
+                        '질병' as kwd_a
+                        , ktc.kwd_a as kwd_b
+                        , ktc.doc_date
+                        , sum(ktc.doc_cnt_both) over(partition by ktc.kwd_a, ktc.doc_date) as doc_cnt_both
 						, dpd.pos_count as pos_cnt_both
                     	, dpd.neg_count as neg_cnt_both
                     	, dpd.neu_count as neu_cnt_both

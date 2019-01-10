@@ -53,7 +53,7 @@ sf.onDrawExpertOpinion = function(isuNm) {
 		endDate:  $("input[name=date_to]").val(),
 		kwd: isuNm
 	};
-
+ 
 	$.ajax({
     type: "post",
   	contentType: 'application/json; charset=utf-8',

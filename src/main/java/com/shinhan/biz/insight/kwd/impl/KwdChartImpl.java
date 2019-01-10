@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.shinhan.biz.insight.kwd.KwdChart;
 import com.shinhan.dao.KwdChartDAO;
-import com.shinhan.vo.DailyKwdAssoVO;
 import com.shinhan.vo.DailyKwdTrendCntV2VO;
 import com.shinhan.vo.DocSentimentVO;
 import com.shinhan.vo.ParamVO;
@@ -197,7 +196,6 @@ public class KwdChartImpl implements KwdChart {
 	public Map<String, Object> getExpertOpinion(ParamVO param) {
 
 		Map<String, Object> map = new HashMap<String, Object>();
-		ArrayList<Object> list = new ArrayList<Object>();
 
 		try {
 			map.put("data", kwdChartDAO.getExpertOpinion(param));
@@ -265,9 +263,6 @@ public class KwdChartImpl implements KwdChart {
 					map.put("kwd", vo.getKwd());
 				if (vo.getSentiFlag() != null)
 					map.put("sentiFlag", vo.getSentiFlag());
-				
-				System.out.println(vo.getSentFlag());
-				System.out.println(vo.getSentiFlag());
 				
 				//map.put("kwdSentiValue", (vo.getKwdSentiValue()*10000)/10000.0000);
 				map.put("kwdSentiValue", vo.getKwdSentiValue());

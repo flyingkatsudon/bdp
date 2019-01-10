@@ -183,10 +183,25 @@ $(document).ready(function() {
 			      //console.log(docs);
 
 			      if (!docs.response || !docs.response.docs || docs.response.docs.length == 0) {
-			      	$(".cus_kwd_asso_time_kwd_search").html("조회된 결과가 없습니다.");
+			      	// 2019.01.07
+			    	// '돌아가기'버튼 추가
+			    	  $(".cus_kwd_asso_time_kwd_search").html(
+			      			"<div class='d-flex justify-content-between'>" + 
+			      				"<div class='doc_search_title'>조회된 결과가 없습니다.</div>" +
+							"<div class='btn_doc_list_close'>[돌아가기]</div>" + 
+						"</div>");
+			      	
+			    	// 임시로 close 기능 붙임 - 추후 수정 필요
+			      	$(".btn_doc_list_close").on("click", function() {
+				      	$(".temp_wrap").show();
+					      $(".cus_kwd_asso_time_table_wrap").show();
+				      	$(".cus_kwd_asso_time_kwd_search").hide();
+				      	$(document).scrollTop(1040)
+
+				      });
 			      	return;
 			      }
-
+			      
 			      docs = docs.response.docs;
 
 						$(".cus_kwd_asso_time_kwd_search").html(

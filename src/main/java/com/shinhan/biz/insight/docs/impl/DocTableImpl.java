@@ -64,7 +64,7 @@ public class DocTableImpl implements DocTable {
 		String currentSvr = "10.10.30.27"; // private
 		Integer currentPort = Integer.parseInt("40001");
 
-		String output = null;
+		String output = "";
 
 		if (param.getCnt() == null || Integer.parseInt(param.getCnt()) <= 10)
 			param.setCnt("10");
@@ -118,7 +118,7 @@ public class DocTableImpl implements DocTable {
 			System.out.println("\n# Network Turnaround : " + lTime + " ms");
 
 			// 조회 성공 but 결과값 없음
-			if (output.trim() == null || output.trim().isEmpty()) {
+			if (output.trim().isEmpty()) {
 				map.put("data", new ArrayList<Object>());
 				map.put("hasDocs", false);
 			} else {

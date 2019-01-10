@@ -41,12 +41,12 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 		
 		String userPwd = user.getUserPassword();
 		
-		if (userPwd == null && userPwd.isEmpty()) {
+		if (userPwd == null || userPwd.isEmpty()) {
 			// 처리로직 추가
 			response.sendRedirect("/");
 		}
 
-		if (userPwd.equals(convPwd))
+		if (userPwd != null && userPwd.equals(convPwd))
 			request.getSession().setAttribute("isInitPwd", true);
 		else
 			request.getSession().setAttribute("isInitPwd", false);

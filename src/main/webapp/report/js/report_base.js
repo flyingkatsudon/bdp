@@ -849,12 +849,12 @@ $(document).ready(function() {
 
 		// 생명사/손보사별 보기 Select box
 		$(".chart_trend_menu").hide();
-
+		
+		//$("div[data-value='day'").click();
+		//sv.period   = "day";
 		sv.cmpyList = [];
-		sv.period   = "day";
 		sv.category = cateNum;
 		sf.onDrawTrendChart();
-
 	});
 
 	$(".control_search_btn").on("click", function() {

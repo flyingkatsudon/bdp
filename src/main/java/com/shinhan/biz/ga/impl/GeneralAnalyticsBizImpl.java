@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -97,7 +98,7 @@ public class GeneralAnalyticsBizImpl implements GeneralAnalyticsBiz {
 			System.out.println("\n# Network Turnaround : " + lTime + " ms");
 			
 			// 조회 성공 but 결과값 없음
-			if (output.trim() == null || output.trim().isEmpty()) {
+			if (output.trim().isEmpty()) {
 				map.put("data", new ArrayList<Object>());
 				map.put("hasDocs", false);
 			} else {
@@ -198,7 +199,7 @@ public class GeneralAnalyticsBizImpl implements GeneralAnalyticsBiz {
 	        // Write the output to a file
 	        String d = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 	        String fileName = param.getAnalyticsCode() + "_" + d + ".xlsx";
-	        File file = new File(fileName);
+	        File file = new File(FilenameUtils.getName(fileName));
 	        logger.debug("file -> {}", file);
 	                
 	        res.setHeader("Set-Cookie", "fileDownload=true; path=/");

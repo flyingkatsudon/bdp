@@ -40,14 +40,6 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<filter>
-		<filter-name>ShinhanCORSFilter</filter-name>
-		<filter-class>com.shinhan.util.ShinhanCORSFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>ShinhanCORSFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<filter>
 		<filter-name>LocalSecurityFilter</filter-name>
 		<filter-class>org.cboard.security.service.LocalSecurityFilter</filter-class>
 	</filter>

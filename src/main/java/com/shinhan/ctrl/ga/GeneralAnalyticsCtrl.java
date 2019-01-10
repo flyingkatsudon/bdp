@@ -1,7 +1,6 @@
 package com.shinhan.ctrl.ga;
 
 import java.net.URLDecoder;
-import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -12,17 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.shinhan.biz.ga.GeneralAnalyticsBiz;
-import com.shinhan.biz.insight.docs.DocTable;
 import com.shinhan.vo.ParamGaVO;
-import com.shinhan.vo.ParamVO;
 
 @Controller
 @RequestMapping("/ga")
@@ -156,32 +152,14 @@ public class GeneralAnalyticsCtrl {
 
 	/* 검색엔진 사용 */
 	// 일반분석환경 - 상세검색
-	@RequestMapping("/call_general_analytics_api")
+	@PostMapping("/call_general_analytics_api")
 	@ResponseBody
 	public Map<String, Object> getAnalyticsDocs(@RequestBody ParamGaVO param) throws Throwable {
 		return generalAnalyticsBiz.getAnalyticsDocs(setParam(param));
 	}
 
-	@Autowired
-	private DocTable docTable;
-
 	/* 검색엔진 사용 */
-	// 키워드 네트워크 원문조회 결과 조회
-	@RequestMapping("/call_general_analytics_api_v2")
-	@ResponseBody
-	public Map<String, Object> getFullSrc(@RequestBody ParamGaVO param) throws Throwable {
-		
-		ParamVO vo = new ParamVO();
-		vo.setBusinessCode("SH");
-		vo.setEndDate("2018-10-15");
-		vo.setFid("BDPC04010105");
-		vo.setQuery("하나은행 가계 가능");
-		vo.setStartDate("2018-09-01");
-
-		return docTable.getFullSrc(vo);
-	}
-	
-	@RequestMapping("/call_general_analytics_excel")
+	@PostMapping("/call_general_analytics_excel")
 	@ResponseBody
 	public void getXlsx(@ModelAttribute ParamGaVO param, HttpServletResponse res) throws Exception {
 		String oriKwd = param.getSearchPattern();

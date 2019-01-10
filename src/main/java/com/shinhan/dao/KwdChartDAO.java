@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.shinhan.vo.DailyKwdAssoVO;
 import com.shinhan.vo.ParamVO;
 
 @Repository

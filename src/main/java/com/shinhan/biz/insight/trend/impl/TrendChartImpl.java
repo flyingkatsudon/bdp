@@ -119,6 +119,8 @@ public class TrendChartImpl implements TrendChart {
 		}
 
 		try {
+			
+			logger.debug("Select Query by Period : " + param.getPeriod());
 			// 조회 단위 구분
 			switch (param.getPeriod()) {
 			case "day":
@@ -131,32 +133,28 @@ public class TrendChartImpl implements TrendChart {
 			case "week":
 				//list = trendChartDAO.getWeeklyKwdTrendV2(param);
 				if (isDiseaseRequest && !isDiseaseCustom)
-					list = trendChartDAO.getKwdDiseaseTrend(param);
-					//list = trendChartDAO.getWeeklyKwdDiseaseTrend(param);
+					list = trendChartDAO.getWeeklyKwdDiseaseTrend(param);
 				else
 					list = trendChartDAO.getWeeklyKwdTrendV3(param);
 				break;
 			case "mon":
 				//list = trendChartDAO.getMonthlyKwdTrendV2(param);
 				if (isDiseaseRequest && !isDiseaseCustom)
-					list = trendChartDAO.getKwdDiseaseTrend(param);
-					//list = trendChartDAO.getMonthlyKwdDiseaseTrend(param);
+					list = trendChartDAO.getMonthlyKwdDiseaseTrend(param);
 				else
 					list = trendChartDAO.getMonthlyKwdTrendV3(param);
 				break;
 			case "quarter":
 				//list = trendChartDAO.getQuarterlyKwdTrendV2(param);
 				if (isDiseaseRequest && !isDiseaseCustom)
-					list = trendChartDAO.getKwdDiseaseTrend(param);
-					//list = trendChartDAO.getQuarterlyKwdDiseaseTrend(param);
+					list = trendChartDAO.getQuarterlyKwdDiseaseTrend(param);
 				else
 					list = trendChartDAO.getQuarterlyKwdTrendV3(param);
 				break;
 			case "year":
 				//list = trendChartDAO.getYearlyKwdTrendV2(param);
 				if (isDiseaseRequest && !isDiseaseCustom)
-					list = trendChartDAO.getKwdDiseaseTrend(param);
-					//list = trendChartDAO.getYearlyKwdDiseaseTrend(param);
+					list = trendChartDAO.getYearlyKwdDiseaseTrend(param);
 				else
 					list = trendChartDAO.getYearlyKwdTrendV3(param);
 				break;
