@@ -6,12 +6,11 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shinhan.ctrl.report.ReportCtrl;
 import com.shinhan.vo.ParamVO;
 
 public class SetData {
 	
-	private static final Logger logger = LoggerFactory.getLogger(ReportCtrl.class);
+	private static final Logger logger = LoggerFactory.getLogger(SetData.class);
 
 	public ParamVO setParam(ParamVO vo) {
 
