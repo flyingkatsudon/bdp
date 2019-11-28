@@ -1,3 +1,4 @@
+## Description of open source which is used in this project.
 <<<<<<< HEAD
 # CBoard
 #### An **open** BI Dashboard platform that supports **interactive** multi-dimensional report design and data analysis  
