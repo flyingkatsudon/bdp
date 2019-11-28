@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	
-(function() {
+(function(global) {
 	
 	var cusKwdAssoChart = function() {
 		this.xArr = [];
@@ -11,11 +11,10 @@ $(document).ready(function() {
 	cusKwdAssoChart.prototype = {
 		setData: function(kwd_asso_data) {
 
-			if (!kwd_asso_data || !kwd_asso_data.data || kwd_asso_data.data.length == 0) {
+			if (!kwd_asso_data || !kwd_asso_data.data || kwd_asso_data.data.length === 0) {
 				return this;
 			}
 			var dataset = [];
-			var slice = 25;
 			
 			var xAxis=[]; var tempAvg=[]; var xArr=[];
 			var yAxis=[]; var yArr=[]; var avgArr = [];
@@ -23,13 +22,13 @@ $(document).ready(function() {
 			var t = kwd_asso_data.data;
 			var n = {};
 			
+			var i = 0;
 			//중복 연관어 골라서 n배열에 저장
-			for (var i = 0; i < t.length; i++) { 
+			for (i = 0; i < t.length; i++) { 
 				if (!n[t[i].kwdB]) n[t[i].kwdB] = [];
 				n[t[i].kwdB].push(t[i]);
 			}
-
-
+			
 			for (var el in n) {
 				var nt  = {};
 				var freqSum = 0;
@@ -38,11 +37,11 @@ $(document).ready(function() {
 					
 				yAxis.push(n[el][0].kwdB);
 
-				for (var i = 0; i < n[el].length; i++) {	
+				for (i = 0; i < n[el].length; i++) {	
 					freqSum += n[el][i].docCntBoth;
 					corrValueSum += n[el][i].corrValue;
 					
-					if(i == n[el].length-1) {
+					if(i === n[el].length-1) {
 						corrValueAvg = corrValueSum/n[el].length;
 					}
 					
@@ -51,7 +50,7 @@ $(document).ready(function() {
 				tempAvg.push(corrValueAvg);
 			}
 			
-			for(var i = 0; i < xAxis.length; i++ ) {
+			for(i = 0; i < xAxis.length; i++ ) {
 				dataset.push({kwdB: yAxis[i], docCntBoth: xAxis[i], corrValue: tempAvg[i]});
 			}
 			
@@ -60,7 +59,7 @@ $(document).ready(function() {
 			    return b['docCntBoth'] - a['docCntBoth'];
 			});
 			
-			for(var i = 0; i < dataset.length; i++) {
+			for(i = 0; i < dataset.length; i++) {
 				xArr.push(dataset[i].docCntBoth);
 				yArr.push(dataset[i].kwdB);
 				avgArr.push(dataset[i].corrValue.toFixed(2));
@@ -83,13 +82,13 @@ $(document).ready(function() {
 			var that = this;
 			var xArr = that.xArr;
 			var yArr = that.yArr;
-			var avgArr = that.avgArr;
+			//var avgArr = that.avgArr;
 				
-			if (!xArr || xArr.length == 0) {
+			if (!xArr || xArr.length === 0) {
 				$(".cus_bar_chart_title").html("\"" + $(".search_box_inp").val() + "\"에 동시출현 빈도수가 검색되지 않았습니다.");
 				//$(".barChart").html("");
 				$("#barChart").html("");
-				return;
+				return false;
 			}
 
 			var chartOptBase = {
@@ -123,12 +122,12 @@ $(document).ready(function() {
 		        top: 30
 		    },
 		    xAxis: {
-        /*type: 'value',
-        min: 0,
-        max: Math.floor((xArr[0] * 1.2)/100) * 100,
-        axisLabel: {rotate: 50, interval: 0}*/
-	    		type: 'value'
-        },
+		        /*type: 'value',
+		        min: 0,
+		        max: Math.floor((xArr[0] * 1.2)/100) * 100,
+		        axisLabel: {rotate: 50, interval: 0}*/
+		    	type: 'value'
+	        },
 		    yAxis: {
 		        type: 'category',
 		        inverse: true,
@@ -158,6 +157,8 @@ $(document).ready(function() {
 			$(parent).attr("_echarts_instance_", "");
 			var myBarChart = echarts.init(parent);
 			myBarChart.setOption(chartOptBase);
+			
+			return true;
 		}
 	};
 	

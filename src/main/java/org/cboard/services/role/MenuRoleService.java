@@ -31,13 +31,6 @@ public class MenuRoleService {
     @Value("${admin_user_id}")
     private String adminUserId;
 
-    /**
-     * Author: Jeremy Kim
-     * Date: 2018-12-01
-     * 
-     * roleId로 메뉴 구분 및 resType에 따라 보이는 메뉴 구분
-     * */
-    
     @Around("execution(* org.cboard.services.MenuService.getMenuList(..))")
     public Object getMenuList(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         

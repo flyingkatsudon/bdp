@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.cboard.dto.User;
 import org.cboard.services.SessionManageService;
 import org.cboard.util.GetClientIP;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,16 +18,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class ValidationInterceptor implements HandlerInterceptor {
 
-	private static final Logger logger = LoggerFactory.getLogger(ValidationInterceptor.class);
-
 	@Autowired
 	private SessionManageService sessionManageService;
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-
-		logger.info("vi -> {}", request.getRequestURL());
 
 		// userList 가져옴
 		ArrayList<Object> userList = sessionManageService.getUserList();

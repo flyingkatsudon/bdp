@@ -2,7 +2,7 @@
 
 $(document).ready(function() {
 	
-(function() {
+(function(global) {
 	
 	var cusKwdAssoNetwork = function(sv) {
 		this.chartData = {};
@@ -24,9 +24,10 @@ $(document).ready(function() {
 			var t = kwd_asso_data.data;
 			var n = {};
 			var r = [];
-				
+			
+			var i = 0;
 			//데이터 중복처리
-			for (var i = 0; i < t.length; i++) {
+			for (i = 0; i < t.length; i++) {
 				if (!n[t[i].kwdB]) n[t[i].kwdB] = [];
 				n[t[i].kwdB].push(t[i]);
 			}
@@ -35,7 +36,7 @@ $(document).ready(function() {
 			for (var el in n) {
 				var nt  = {};
 				var sum = 0;
-				for (var i = 0; i < n[el].length; i++) {	
+				for (i = 0; i < n[el].length; i++) {	
 					sum += n[el][i].docCntBoth;
 				}
 				r.push({title: n[el][0].kwdB, value: sum});
@@ -54,7 +55,7 @@ $(document).ready(function() {
 					}
 			}
 			
-			for(var i = 0; i < r.length; i++) {
+			for(i = 0; i < r.length; i++) {
 				var id = "1-"+(i+3);
 				this.temp.data.nodes.push({ID: id, LABEL: r[i].title, COLOVALUE: "red", SIZEVALUE: r[i].value});
 				this.temp.data.links.push({FROMID: 1, TOID: id, STYLE: "solid"});
@@ -68,19 +69,14 @@ $(document).ready(function() {
 		},
 		
 		onDrawChart: function() {
-			
-
 			var that = this;
-			var data = that.data;
-			var chartData = that.chartData;
-			
-			if (!that.data || that.data.length == 0) {
+			if (!that.data || that.data.length === 0) {
 				$(".cus_network_chart_title").html("\"" + $(".search_box_inp").val() + "\"의 연관어가 검색되지 않았습니다.");
 				$("#network").html("");
 				$("#sliderBarValueAfterEvent").html("");
 				$('#sliderBar').off();
 				$('#sliderBar').hide();
-				return;
+				return false;
 			}
 			
 			$('#sliderBar').show();
@@ -90,12 +86,12 @@ $(document).ready(function() {
 			//slider.innerHTML = "<input type='range' min='1' max='20' value='" + curSv + "' class='slider' id='myRange' style='width:70%; margin-left: 60px;'><div class='row container'><span id='demo' style='font-weight:bold; color: black; margin-left: 230px;'></span></div>";
 			slider.innerHTML = "<div style='text-align: center;'><input type='range' min='1' max='20' value='" + curSv + "' class='slider' id='myRange' style='width: 300px;'></div><div><div id='demo' style='font-weight:bold; color: black; text-align: center; width: 300px; font-size: 12px;' class='d-flex justify-content-between mx-auto'></div></div>";
 			
-			var slider = document.getElementById("myRange");
+			slider = document.getElementById("myRange");
 			var output = document.getElementById("demo");
 			output.innerHTML = "<div>" + 1 + "</div><div>" + 10 + "</div><div>" + 20 + "</div>";
 			
 			slider.oninput = function() {
-		    output.innerHTML = this.value;
+				output.innerHTML = this.value;
 			}
 
 			var chartOpts = {
@@ -132,13 +128,12 @@ $(document).ready(function() {
 			this.chartData.data.nodes=this.temp.data.nodes.slice(0, Number(slider.value) + 1);
 			this.chartData.data.links=this.temp.data.links.slice(0, Number(slider.value) + 1);
 			
-			chartObj = netGobrechtsD3Force('network', chartOpts);
-			chartObj.alignFixedNodesToGrid(true).height(450).render(this.chartData);
-		  window.chartObj = chartObj;  
-	    var curS = document.getElementById('sliderBar');
-	    
-	    $("#sliderBar").off();
-	    $('#sliderBar').on('mouseup', '#myRange', function(ch) {
+			this.chartObj = netGobrechtsD3Force('network', chartOpts);
+			this.chartObj.alignFixedNodesToGrid(true).height(450).render(this.chartData);
+			window.chartObj = this.chartObj;  
+			
+		    $("#sliderBar").off();
+		    $('#sliderBar').on('mouseup', '#myRange', function(ch) {
 
 				var rawData = SDII.Chart.cusKwdAssoNetwork.rawData;
 
@@ -157,9 +152,11 @@ $(document).ready(function() {
 				newData.data.nodes=newData.data.nodes.slice(0, (Number($('#myRange').val())+1));
 				newData.data.links=newData.data.links.slice(0, (Number($('#myRange').val())+1));
 				
-				chartObj = null;
-				chartObj = netGobrechtsD3Force('network', chartOpts);
-				chartObj.alignFixedNodesToGrid(true).render(newData);
+				that.chartObj = null
+				
+				that.chartObj = netGobrechtsD3Force('network', chartOpts);
+				that.chartObj.alignFixedNodesToGrid(true).render(newData);
+				window.chartObj = that.chartObj;
 				
 				//barchart overflow:scroll control	
 				if(Number($('#myRange').val()) <= 10) {
@@ -190,7 +187,9 @@ $(document).ready(function() {
 				
 				new SDII.Chart.cusKwdAssoChart().setData(SDII.Chart.cusKwdAssoChart.rawData).onDrawChart();
 	    	
-	    });/*.bind(curS));*/
+		    });/*.bind(curS));*/
+	    
+	    	return true;
 		}
 	};
 	

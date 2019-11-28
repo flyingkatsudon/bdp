@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.shinhan.vo.DocLocVO;
 import com.shinhan.vo.ParamVO;
 
 @Repository
@@ -21,6 +20,4 @@ public interface CusTrendChartDAO {
 
 	ArrayList<Object> getYearlyTrendV2(@Param("param") ParamVO param);
 
-	// 위치브리핑 (미사용)
-	ArrayList<DocLocVO> getDocLoc(@Param("param") ParamVO param);
 }

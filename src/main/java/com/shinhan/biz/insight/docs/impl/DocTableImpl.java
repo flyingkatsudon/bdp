@@ -60,8 +60,8 @@ public class DocTableImpl implements DocTable {
 	public Map<String, Object> getFullSrc(ParamVO param) throws Throwable {
 
 		//String currentSvr = "143.248.208.110"; // 대전
-		//String currentSvr = "13.209.126.208"; // public
-		String currentSvr = "10.10.30.27"; // private
+		String currentSvr = "13.209.126.208"; // public
+		//String currentSvr = "10.10.30.27"; // private
 		Integer currentPort = Integer.parseInt("40001");
 
 		String output = "";
@@ -71,7 +71,8 @@ public class DocTableImpl implements DocTable {
 
 		// And 조건만 검색 (2018.10.16 기준)
 		if (param.getOperator() == null || param.getOperator().equals(""))
-			param.setOperator("AND");
+			param.setOperator("OR"); //param.setOperator("AND");
+			
 
 		if (param.getDomainOpt() == null || param.getDomainOpt().equals(""))
 			param.setDomainOpt("01");
@@ -97,9 +98,11 @@ public class DocTableImpl implements DocTable {
 		String andQuery = ""; // Operator가 AND일 경우, AND로 작동 (Query는 반드시 포함된 결과 도출)
 		String orQuery = ""; // Operator가 OR일 경우, OR로 작동 (Query는 반드시 포함된 결과 도출)
 		String notQuery = ""; // 제외 키워드
+		
+		//orQuery = param.getQuery();
 
 		Map<String, Object> map = new HashMap<String, Object>();
-
+		
 		try {
 			// 검색어나 script_uid 둘 다 이용해서 검색가능하도록 수정_2018.09.18
 			Date startTime = new Date();
@@ -150,16 +153,9 @@ public class DocTableImpl implements DocTable {
 		}
 
 		try {
-			
-			/*if (param.getFid() == null) {
-				map.put("data", setSmmryExtv(docTableDAO.getSmmryExtv(param)));
-			} else {
-				if(param.getFid().equals("BDPC04030301")) 
-					map.put("data", setSmmryExtv(docTableDAO.getStockSmmryExtv(param)));
-			}*/
 
-			if(param.getFid().equals("BDPC04030301")) map.put("data", setSmmryExtv(docTableDAO.getStockSmmryExtv(param)));
-			map.put("data", setSmmryExtv(docTableDAO.getSmmryExtv(param)));
+			if(param.getFid().equals("BDPC04030302")) map.put("data", setSmmryExtv(docTableDAO.getStockSmmryExtv(param)));
+			else map.put("data", setSmmryExtv(docTableDAO.getSmmryExtv(param)));
 
 			map.put("isSuccess", true);
 
@@ -173,53 +169,8 @@ public class DocTableImpl implements DocTable {
 		return map;
 	}
 
-	/*public ArrayList<Map<String, Object>> setAbsScript(ArrayList<Object> list) {
-
-		ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-
-		if (list != null && list.size() > 0) {
-			for (Object o : list) {	
-				ScriptRelDocsStdInfoVO vo = (ScriptRelDocsStdInfoVO) o;
-				Map<String, Object> map = new HashMap<String, Object>();
-	
-				if (vo.getCnt() != 0)
-					map.put("cnt", vo.getCnt());
-	
-				if (!vo.getScriptUid().equals(""))
-					map.put("scriptUid", vo.getScriptUid());
-				
-				if (!vo.getCategoryCode().equals(""))
-					map.put("categoryCode", vo.getCategoryCode());
-				
-				if (!vo.getScriptTitle().equals(""))
-					map.put("scriptTitle", vo.getScriptTitle());
-				
-				if (vo.getScriptWeight() != 0)
-					map.put("scriptWeight", Math.round(vo.getScriptWeight() * 100.00) / 100.00);
-				
-				if (vo.getScriptRank() != 0)
-					map.put("scriptRank", vo.getScriptRank());
-				
-				if (vo.getUpdateDate() != null)
-					map.put("updateDate", vo.getUpdateDate());
-				
-				if (vo.getScriptDate() != null)
-					map.put("scriptDate", vo.getScriptDate());
-				
-				if (vo.getCId() != null)
-					map.put("cId", vo.getCId());
-	
-				result.add(map);
-			}
-		}
-
-		return result;
-	}*/
-	
 	public ArrayList<Map<String, Object>> mergeList(ArrayList<Map<String, Object>> result, ArrayList<Object> list){
 
-		//ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-		
 		if (list != null && list.size() > 0) {
 			for (Object o : list) {	
 				ScriptRelDocsStdInfoVO vo = (ScriptRelDocsStdInfoVO) o;
@@ -317,52 +268,9 @@ public class DocTableImpl implements DocTable {
 					map.put("relDocSummary", vo.getRelDocSummary());
 				
 				map.put("sumRate", vo.getSumRate() * 10000 / 10000.0000);
-	
+
 				result.add(map);
 			}
-		}
-
-		return result;
-	}
-	
-	public ArrayList<Map<String, Object>> removeNullStdInfo(ArrayList<ScriptRelDocsStdInfoVO> list) {
-
-		ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-
-		for (int i = 0; i < list.size(); i++) {
-
-			ScriptRelDocsStdInfoVO vo = list.get(i);
-
-			Map<String, Object> map = new HashMap<String, Object>();
-
-			if (vo.getCnt() != 0)
-				map.put("cnt", vo.getCnt());
-			if (vo.getScriptPeriodSd() != null)
-				map.put("scriptPeriodSd", vo.getScriptPeriodSd());
-			if (vo.getScriptPeriodEd() != null)
-				map.put("scriptPeriodEd", vo.getScriptPeriodEd());
-			if (vo.getScriptDate() != null)
-				map.put("scriptDate", vo.getScriptDate());
-
-			if (vo.getScriptWeight() != 0)
-				map.put("scriptWeight", Math.round(vo.getScriptWeight() * 100.00) / 100.00);
-			if (vo.getScriptRank() != 0)
-				map.put("scriptRank", vo.getScriptRank());
-			if (vo.getLoadDate() != null)
-				map.put("loadDate", vo.getLoadDate());
-			if (vo.getUpdateDate() != null)
-				map.put("updateDate", vo.getUpdateDate());
-
-			if (!vo.getScriptUid().equals(""))
-				map.put("scriptUid", vo.getScriptUid());
-			if (!vo.getCategoryCode().equals(""))
-				map.put("categoryCode", vo.getCategoryCode());
-			if (!vo.getScriptTitle().equals(""))
-				map.put("scriptTitle", vo.getScriptTitle());
-			if (vo.getCId() != null)
-				map.put("cId", vo.getCId());
-
-			result.add(map);
 		}
 
 		return result;

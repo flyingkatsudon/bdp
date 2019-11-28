@@ -80,7 +80,7 @@ public class KwdChartImpl implements KwdChart {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		ArrayList<Object> list = new ArrayList<Object>();
-		
+		/*
 		switch(param.getPeriod()) {
 		case "day":
 			list = kwdChartDAO.getDailyKwdAssoV2(param);
@@ -100,7 +100,7 @@ public class KwdChartImpl implements KwdChart {
 		default:
 			list = kwdChartDAO.getWeeklyKwdAssoV2(param);
 		}
-		
+		*/
 		// 조회일 기준 -1달 간의 주별 조회만 가능하도록
 		list = kwdChartDAO.getWeeklyKwdAssoV2(param);
 		

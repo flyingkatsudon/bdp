@@ -7,12 +7,6 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 
-/**
- * Author: Jeremy Kim
- * Date: 2018.08.30
- * 
- * UsernamePasswordAuthenticationToken 재구성
- * */
 public class SDIIAuthenticationToken extends AbstractAuthenticationToken {
 	
 	private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
@@ -20,12 +14,6 @@ public class SDIIAuthenticationToken extends AbstractAuthenticationToken {
 	private final Object principal;
 	private Object credentials;
 
-	/**
-	 * Author: Jeremy Kim
-	 * Date: 2018.08.31
-	 * 
-	 * Contructor 2개 새로 생성
-	 * */
 	public SDIIAuthenticationToken(Object principal) {
 		super(null);
 		this.principal = (User) principal;

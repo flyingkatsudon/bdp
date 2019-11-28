@@ -31,64 +31,27 @@ $(document).ready(function(){
 		var param = {
 				userId: $("input[name=userId]").val(),
 				userPassword: $("input[name=userPassword]").val(),
-				oldUserPassword: $("input[name=oldUserPassword]").val(),
-				businessCode: $("input[name=businessCode]").val(),
-				checkPw: $("input[name=checkPw]").val()
+				checkPassword: $("input[name=checkPassword]").val(),
+				businessCode: $("input[name=businessCode]").val()
 		}
 		
-		if(validate(param)){
-			$.ajax({
-				url: 'update',
-				type : 'POST',
-	        	contentType: 'application/json; charset=utf-8',
-				data : JSON.stringify(param),
-				success: function(response){
-					alert(response.msg);
-					window.location.href = response.location;
-				}, 
-				error: function(response) {
-					console.log(response);
-				},
-				complete: function() {
-				}
-			});
-		} else {
-			return false;
-		}
-	});
-	
-	var validate = function(param) {
-		
-		// 비밀번호 확인
-		if (param.userPassword == 'undefined' || param.userPassword == '') {
-			alert('비밀번호를 확인하세요');
-			return false;
-		}
-	
-		// 새 비밀번호와 일치하는지 확인
-		if (param.userPassword != param.checkPw) {
-			alert('비밀번호가 일치하지 않습니다');
-			return false;
-		} 
-		// 일치한다면
-		else {
-			var rule = /(?=.*[a-z])(?=.*[A-Z])(?=.*[#$^+=!*()@%&]).{8,20}$/;
-			
-			// 비밀번호 유효성 검사
-			if (param.userPassword == 'init12345') {
-				alert('초기 비밀번호로 변경할 수 없습니다');
-				return false;
-			} else if (!rule.test(param.userPassword)){
-				alert('비밀번호는 8자리 이상, 대소문자, 특수문자를 포함하여 입력하세요');
-				return false;
-			} else if (param.userPassword == 'init12345') {
-				alert('초기 비밀번호로 변경할 수 없습니다');
-				return false;
-			} else {
-				return true;
+		$.ajax({
+			url: 'update',
+			type : 'POST',
+        	contentType: 'application/json; charset=utf-8',
+			data : JSON.stringify(param),
+			success: function(response){
+				alert(response.msg);
+				if (response.location == null) return false; 
+				window.location.href = response.location;
+			}, 
+			error: function(response) {
+				console.log(response);
+			},
+			complete: function() {
 			}
-		}
-	}
+		});
+	});
 });
 
 </script>
@@ -140,7 +103,6 @@ $(document).ready(function(){
 			</center>
 			<div class="form-group has-feedback">
 				<input type="text" class="form-control" name="userId" value="<%=userId %>" readOnly>
-				<input type="hidden" name="oldUserPassword" value="<%=userPassword %>"/>
 				<input type="hidden" name="businessCode" value="<%=businessCode %>"/>
 				<span class="glyphicon glyphicon-user form-control-feedback"></span>
 			</div>
@@ -149,7 +111,7 @@ $(document).ready(function(){
 				<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 			</div>
 			<div class="form-group has-feedback">
-				<input type="password" class="form-control" placeholder="비밀번호 확인" name="checkPw" autocomplete="new-password"> 
+				<input type="password" class="form-control" placeholder="비밀번호 확인" name="checkPassword" autocomplete="new-password"> 
 				<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 			</div>
 			<div class="row">

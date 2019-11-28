@@ -21,15 +21,15 @@ public interface KwdChartDAO {
 	ArrayList<Object> getYearlyKwdAsso(@Param("param") ParamVO param);
 	
 	// 다음레포트  기간별 연관어 차트
-	ArrayList<Object> getDailyKwdAssoV2(@Param("param") ParamVO param);
+	//ArrayList<Object> getDailyKwdAssoV2(@Param("param") ParamVO param);
 	
 	ArrayList<Object> getWeeklyKwdAssoV2(@Param("param") ParamVO param);
 	
-	ArrayList<Object> getMonthlyKwdAssoV2(@Param("param") ParamVO param);
+	//ArrayList<Object> getMonthlyKwdAssoV2(@Param("param") ParamVO param);
 	
-	ArrayList<Object> getQuarterlyKwdAssoV2(@Param("param") ParamVO param);
+	//ArrayList<Object> getQuarterlyKwdAssoV2(@Param("param") ParamVO param);
 	
-	ArrayList<Object> getYearlyKwdAssoV2(@Param("param") ParamVO param);
+	//ArrayList<Object> getYearlyKwdAssoV2(@Param("param") ParamVO param);
 
 	// 긍부정차트
 	ArrayList<Object> getEmoAsso(@Param("param") ParamVO param);

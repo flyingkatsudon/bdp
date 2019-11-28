@@ -34,13 +34,13 @@ sf.clearNetwork = function() {
 
 // Category ID 값에 맞는 카테고리 한글명 매핑
 sf.getTrendChartName   = function() {
-	$prefix = "NEWS";
-	if      (sv.category == "2") $prefix = "SNS";
-	else if (sv.category == "4") $prefix = "시장";
-	else if (sv.category == "5") $prefix = "종목";
-	else if (sv.category == "6") $prefix = "상품";
-	else if (sv.category == "7") $prefix = "건강";
-	else if (sv.category == "8") $prefix = "질병";
+	var $prefix = "NEWS";
+	if      (sv.category === "2") $prefix = "SNS";
+	else if (sv.category === "4") $prefix = "시장";
+	else if (sv.category === "5") $prefix = "종목";
+	else if (sv.category === "6") $prefix = "상품";
+	else if (sv.category === "7") $prefix = "건강";
+	else if (sv.category === "8") $prefix = "질병";
 	return $prefix;
 }
 
@@ -76,6 +76,7 @@ sf.onReqAbsScrpt = function() {
         return false;
       }
       sf.onDrawCard(data);
+      return true;
     },
     error: function (request, status, error) {
     	console.log('code: '+request.status+"\n"+'message: '+request.responseText+"\n"+'error: '+error);
@@ -96,8 +97,8 @@ sf.onDrawCard = function (res) {
 	$("div[card-data-type='7']").html("데이터가 없습니다.");
 	$("div[card-data-type='8']").html("데이터가 없습니다.");
 
-	if (!res.isSuccess || res.data.length == 0) {
-		if (sv.category == "5") { // 종목 브리핑인경우 별도 메세지
+	if (!res.isSuccess || res.data.length === 0) {
+		if (sv.category === "5") { // 종목 브리핑인경우 별도 메세지
 			alert("종목이 존재하지않아 트렌드차트 조회가 되지 않습니다.");
 			sf.clearTrend();
 			$("body").loading("stop");
@@ -110,7 +111,7 @@ sf.onDrawCard = function (res) {
 
 	for (var i = 0; i < d.length; i++) {
 
-		if (!sv.has_cate5_data && d[i].cId == "5")
+		if (!sv.has_cate5_data && d[i].cId === "5")
 			sv.has_cate5_data = true;
 
 		//var cateId = d[i].categoryCode;
@@ -118,13 +119,13 @@ sf.onDrawCard = function (res) {
 		if (!cateId) continue;
 
 		var parent = $("div[card-data-type=" + cateId + "]");
-		if (parent.length == 0) continue;
+		if (parent.length === 0) continue;
 
 		if (!c[cateId]) {
 			parent.html("");
 			c[cateId] = 0;
 		}
-		if (c[cateId] == 5) continue;
+		if (c[cateId] === 5) continue;
 
 		var cursrc = d[i].scriptTitle || "";
 
@@ -134,8 +135,8 @@ sf.onDrawCard = function (res) {
 		}
 		if (cursrc.length > 13) cursrc = d[i].scriptTitle.substr(0, 12) + "...";
 
-		$hoverCont = d[i].scriptLabelL2 ? d[i].scriptLabelL2 : d[i].scriptTitle;
-		$a_tag = $("<span class='content_num'>" +  d[i].cnt + " </span><a class='src_title'>" + cursrc + "</a>");
+		var $hoverCont = d[i].scriptLabelL2 ? d[i].scriptLabelL2 : d[i].scriptTitle;
+		var $a_tag = $("<span class='content_num'>" +  d[i].cnt + " </span><a class='src_title'>" + cursrc + "</a>");
 		$a_tag.attr("data-container", "body")
 		  .attr("data-trigger", "hover")
 			.attr("data-toggle", "popover")
@@ -163,17 +164,18 @@ sf.onDrawCard = function (res) {
 
 			$.ajax({
 				url: SDII.Url + "/report/get_smmry_extv",
-		    type: "post",
-        	contentType: 'application/json; charset=utf-8',
-					dataType: "JSON",
-	    	data: JSON.stringify({
-	    	  	fid: sv.reqMap[$(this).attr('data-cid')].smmry,
-		    	scriptUid: $(this).attr("uuid"),
-		    	date: $(".flatpickr")[1]._flatpickr.input.value,
-	    		cnt : 999
-		    }),
+			    type: "post",
+	        	contentType: 'application/json; charset=utf-8',
+				dataType: "JSON",
+		    	data: JSON.stringify({
+		    	  	fid: sv.reqMap[$(this).attr('data-cid')].smmry,
+			    	scriptUid: $(this).attr("uuid"),
+			    	date: $(".flatpickr")[1]._flatpickr.input.value,
+		    		cnt : 999
+		    	}),
 		   	success: function (data) {
 
+		   		console.log(data);
 		   		$(document).scrollTop(70);
 
 		      if (!data.isSuccess) {
@@ -181,7 +183,7 @@ sf.onDrawCard = function (res) {
 		        return false;
 		      }
 		      
-		      if (!data.data || data.data.length == 0) {
+		      if (!data.data || data.data.length === 0) {
 		      	$(".docs_extv_cont").html("<div>조회된 결과가 없습니다.</div>");
 		      	return false;
 		      }
@@ -193,9 +195,9 @@ sf.onDrawCard = function (res) {
 		      var d = data.data;
 		      for (var i = 0; i < d.length; i++) {
 		      	
-		      	$title = $("<div class='smmry_title smmry_link' url='" + d[i].relDocUid + "'>" + d[i].scriptTitle	+ "</div>");
-		      	$smmry = $("<div class='smmry_cont'>" + d[i].relDocSummary	+ "</div>");
-		      	$row   = $("<div class='smmry_row_wrap'></div>");
+		      	var $title = $("<div class='smmry_title smmry_link' url='" + d[i].relDocUid + "'>" + d[i].scriptTitle	+ "</div>");
+		      	var $smmry = $("<div class='smmry_cont'>" + d[i].relDocSummary	+ "</div>");
+		      	var $row   = $("<div class='smmry_row_wrap'></div>");
 
 		      	$row.append($title).append($smmry);//.append($url);
 		      	$(".docs_extv_cont").append($row);
@@ -204,6 +206,8 @@ sf.onDrawCard = function (res) {
 		      $(".smmry_link").on("click", function() {
 		      	window.open($(this).attr("url"), "", "width=1200,height=800");
 		      });
+		      
+		      return true;
 		    },
 		    error: function (request, status, error) {
 		    	console.log('code: '+request.status+"\n"+'message: '+request.responseText+"\n"+'error: '+error);
@@ -211,9 +215,11 @@ sf.onDrawCard = function (res) {
 			    return false;
 		  	}
 			});
+			
+			return true;
 		});
 
-		if (cateId != "5") {
+		if (cateId !== "5") {
 			parent.append($a_tag).append("<div class='content_bdr'></div>");	
 		} else {
 			var wrapDiv = $("<div class='d-flex justify-content-between link_wrap'></div>");
@@ -237,11 +243,14 @@ sf.onDrawCard = function (res) {
 
 		$(".stock_pop_mini_title").text(isuNm);
 		$(".stock_pop_mini").css("top", event.pageY + "px").css("left", event.pageX + "px").show();
+		
+		return true;
 	});
 
 	$(".stock_pop_mini_close").off();
 	$(".stock_pop_mini_close").on("click", function() {
 		$(".stock_pop_mini").hide();
+		return true;
 	});
 	
 	$(".btn_stock").off();
@@ -267,9 +276,6 @@ sf.onDrawCard = function (res) {
 		$(".dashboard_trend_isu_sch").show();
 		
 		$(".chart_trend_menu").hide();
-
-
-		
 		
 		var fn = $(this).attr("func-num");
 		
@@ -280,23 +286,27 @@ sf.onDrawCard = function (res) {
 		
 		$(".stock_pop_mini_close").click();
 		
-		if (fn == "0") {
+		if (fn === "0") {
 			sf.onDrawTrendChart(isuNm);
 			return false;
 		}
 
 		sf.onDrawStkPop();
 		
-		if (fn == "1") {
+		if (fn === "1") {
 			sf.onDrawExpertOpinion(isuNm);
-		} else if (fn == "2") {
+		} else if (fn === "2") {
 			sf.onDrawBoardLink(isuNm, isuNum);
 		} else {
 			sf.onDrawDisclosure(isuNm);
 		}
+		
+		return true;
 	});
 	
-	if (sv.category == "5") sf.onDrawTrendChart();
+	if (sv.category === "5") sf.onDrawTrendChart();
+	
+	return true;
 }
 
 // 트렌드 차트 요청 공통 
@@ -306,7 +316,7 @@ sf.onDrawTrendChart = function(schKwd) {
 
 	sf.clearNetwork();
 
-	$trendParam = {
+	var $trendParam = {
 	  	businessCode: sv.groupCd,
 	  	period      : sv.period,
 	  	fid         : sv.reqMap[sv.category].trend,
@@ -314,13 +324,13 @@ sf.onDrawTrendChart = function(schKwd) {
 	  	endDate     : $(".flatpickr input[name='date_to']").val()
 	};
 	
-	if (sv.category == "5" || sv.category == "8"){
-  		if (sv.category == "5") 
+	if (sv.category === "5" || sv.category === "8"){
+  		if (sv.category === "5") 
   			$trendParam.kwdA = $(".rank_wrap a:first").text();
 
   		if (schKwd) $trendParam.kwdA = schKwd;
   		
-  		if ( sv.category == "8" && !schKwd) $trendParam.nerInfoA = "질병/증상";
+  		if ( sv.category === "8" && !schKwd) $trendParam.nerInfoA = "질병/증상";
   	}
 
 	$.ajax({
@@ -337,6 +347,8 @@ sf.onDrawTrendChart = function(schKwd) {
       }
       $(".chart_trend_tooltip").show();
       sv.curTrendChart = new SDII.Chart.trendChart().setData(data).onDrawChart();
+      
+      return true;
     },
     error: sf.onErrorComm
 	});
@@ -345,7 +357,7 @@ sf.onDrawTrendChart = function(schKwd) {
 // 기간별 연관어 Top 10
 sf.onRequestKwdAssoV2 = function(kwd) {
 
-	if (kwd && typeof kwd == "object") kwd = kwd.text;
+	if (kwd && typeof kwd === "object") kwd = kwd.text;
 	
 	if (!kwd) {
 		alert("조회될 키워드가 없습니다.");
@@ -374,33 +386,33 @@ sf.onRequestKwdAssoV2 = function(kwd) {
 	$.ajax({
 		url: SDII.Url + "/cus/get_kwd_asso_v2",
 		type: "POST",
-  	contentType: "application/json; charset=utf-8",
+		contentType: "application/json; charset=utf-8",
 		dataType: "JSON",
 		data:  JSON.stringify(newParam),
 		success: function(kwdAssoTimeResult) {
-
 			$("body").loading("stop");
 
-	  	if (!kwdAssoTimeResult.isSuccess) {
-	  		alert("데이터 요청에 실패하였습니다.");
-	  		return false;
-	  	}
-
-	  	if (!kwdAssoTimeResult.data || kwdAssoTimeResult.data.length == 0) {
-				$("#chart_trend_sub").html("");
-				$(".chart_trend_sub_wrap").slideUp("fast");
-				alert("[" + kwd + "]에 대한 연관어 검색 결과를 찾을 수 없습니다.");
-	  		return false;
-	  	}
-
-	  	$("#chart_trend_sub").html(
-	  		"<div class='chart_trend_sub_title'>[" + kwd + "] 연관어 기간별 Top " + (newParam.cnt) + "</div>" +
-	  		"<div class='chart_trend_sub_container'></div>"
-  		);
-
-	  	new SDII.Chart.kwdAssoTimeTable(newParam.cnt, $(".chart_trend_sub_container")).setData(kwdAssoTimeResult).onDrawChart();
-    }
+		  	if (!kwdAssoTimeResult.isSuccess) {
+		  		alert("데이터 요청에 실패하였습니다.");
+		  		return false;
+		  	}
+	
+		  	if (!kwdAssoTimeResult.data || kwdAssoTimeResult.data.length === 0) {
+					$("#chart_trend_sub").html("");
+					$(".chart_trend_sub_wrap").slideUp("fast");
+					alert("[" + kwd + "]에 대한 연관어 검색 결과를 찾을 수 없습니다.");
+		  		return false;
+		  	}
+	
+		  	$("#chart_trend_sub").html(
+		  		"<div class='chart_trend_sub_title'>[" + kwd + "] 연관어 기간별 Top " + (newParam.cnt) + "</div>" +
+		  		"<div class='chart_trend_sub_container'></div>"
+	  		);
+		  	new SDII.Chart.kwdAssoTimeTable(newParam.cnt, $(".chart_trend_sub_container")).setData(kwdAssoTimeResult).onDrawChart();
+		  	return true;
+		}
 	});
+	return true;
 }
 window.onRequestKwdAssoV2 = sf.onRequestKwdAssoV2;
 
@@ -408,7 +420,7 @@ window.onRequestKwdAssoV2 = sf.onRequestKwdAssoV2;
 sf.onReqPosNegStat = function(kwd) {
 
 	//console.log(kwd);
-	if (!kwd || kwd.split(",").length != 3) {
+	if (!kwd || kwd.split(",").length !== 3) {
 		return false;
 	}
 
@@ -418,45 +430,48 @@ sf.onReqPosNegStat = function(kwd) {
 
 	$.ajax({
 		url: SDII.Url + "/report/get_emo_asso",
-	  type: "post",
+		type: "post",
 		contentType: 'application/json; charset=utf-8',
 		dataType: "JSON",
 		data: JSON.stringify({
-	  	period: sv.period,
-	  	kwdA: sKwd[0],
-	  	kwdB: sKwd[1],
-	  	date: sKwd[2],
-	  	fid: sv.reqMap[sv.category].posneg,
+		  	period: sv.period,
+		  	kwdA: sKwd[0],
+		  	kwdB: sKwd[1],
+		  	date: sKwd[2],
+		  	fid: sv.reqMap[sv.category].posneg,
 			cnt : 10
-	  }),
-   	success: function (data) {
+		}),
+   		success: function (data) {
 
-   		$("body").loading("stop");
-
-      if (!data.isSuccess) {
-      	alert("데이터 요청에 실패하였습니다.");
+	   		$("body").loading("stop");
+	
+	   		if (!data.isSuccess) {
+	   			alert("데이터 요청에 실패하였습니다.");
 				return false;
-      }
-
-      if (data.data.length == 0) {
-      	alert(sKwd[0] + "/" + sKwd[1] + "에 대한 긍부정 연관어가 조회되지 않습니다.");
-      	$(".chart_trend_sub_wrap").slideUp("fast");
-      	return false;
-      }
-      //console.log(data);
-
+	   		}
+	
+	   		if (data.data.length === 0) {
+	   			alert(sKwd[0] + "/" + sKwd[1] + "에 대한 긍부정 연관어가 조회되지 않습니다.");
+	   			$(".chart_trend_sub_wrap").slideUp("fast");
+	   			return false;
+	   		}
+	   		//console.log(data);
+	
 			$(".chart_trend_sub_wrap").slideDown("fast");
 			$("#chart_trend_sub").html("<div class='chart_trend_sub_title'>" + sKwd[0] + "/" + sKwd[1] + "에 대한 긍부정 연관어 조회중입니다.</div>");
-
+	
 			new SDII.Chart.posNegAssoChart(10, $("#chart_trend_sub"), kwd).setData(data).onDrawChart();
-    },
+			return true;
+		},
 		error: function (request, status, error) {
 			$("body").loading("stop");
-	    console.log('code: '+request.status+"\n"+'message: '+request.responseText+"\n"+'error: '+error);
-		  alert("데이터 요청에 실패하였습니다..");
-		  return false;
-	  }
+		    console.log('code: '+request.status+"\n"+'message: '+request.responseText+"\n"+'error: '+error);
+			alert("데이터 요청에 실패하였습니다..");
+			return false;
+		}
 	});
+	
+	return true;
 }
 window.onReqPosNegStat = sf.onReqPosNegStat;
 
@@ -488,18 +503,20 @@ sf.onRequestKwdNetwork = function(top3Kwd, date, cName) {
         return false;
       }
 
-      if (data.data.length == 0) {
+      if (data.data.length === 0) {
     	var relTitle = top3Kwd;
-    	if (sv.category == "5") relTitle = cName + "/" + relTitle;
+    	if (sv.category === "5") relTitle = cName + "/" + relTitle;
       	$("#chart_network_title").text("'" + relTitle + "'에 대한 연관어를 찾을 수 없습니다.");
       	$("#chart_network_chart").html("");
       	$("body").loading("stop");
       	return false;
       }
       new SDII.Chart.kwdNetwork().setData(data, cName, top3Kwd).onDrawChart();
+      return true;
     }.bind(this, cName, top3Kwd),
     error: sf.onErrorComm
 	});
+	return true;
 }
 window.onRequestKwdNetwork = sf.onRequestKwdNetwork;
 
@@ -512,9 +529,9 @@ sf.channelAction = function(t, p, d) {
 	//$("#chart_trend_sub").html("<div class='chart_trend_sub_title'>" + p + " " + t + "에 대한 채널별 확산 조회중입니다.</div>");
 	$("#chart_trend_sub").html("<div class='chart_trend_sub_title'>" + p + "에 대한 채널별 확산 조회중입니다.</div>");
 
-	$frmDate = moment(d);
-	$toDate  = moment($("input[name=date_to]").val());
-	$gapDate = ($toDate - $frmDate) / 1000;
+	var $frmDate = moment(d);
+	var $toDate  = moment($("input[name=date_to]").val());
+	var $gapDate = ($toDate - $frmDate) / 1000;
 
 	if ($gapDate < 604800)
 		$frmDate = $toDate.clone().subtract(7, "days");
@@ -523,9 +540,9 @@ sf.channelAction = function(t, p, d) {
 
 		url: SDII.Url + "/report/get_trd_v2",
 		type: 'post',
-  	contentType: 'application/json; charset=utf-8',
+		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
-    data: JSON.stringify({
+		data: JSON.stringify({
 			kwdA: p,
 			kwdB: t,
 			startDate: $frmDate.format("YYYY-MM-DD"),
@@ -533,136 +550,135 @@ sf.channelAction = function(t, p, d) {
     	period: "day",
     	fid   : sv.reqMap[sv.category].chnl,
     	businessCode: sv.groupCd
-    }),
-    success: function(chnlResult) {
+		}),
+    	success: function(chnlResult) {
 
-    	$("#chart_trend_sub").html("");
-
-    	var isSuccess = true;
-
-    	if (!chnlResult.isSuccess) {
-    		alert("데이터 요청에 실패하였습니다.");
-    		isSuccess = false;
-    	}
-
-    	if (!chnlResult.data || chnlResult.data.length == 0) {
-    		//if (isSuccess) alert("[" + p + " " + t + "] 에 대한 채널별 검색 결과가 존재하지 않습니다.");
-    		if (isSuccess) alert("[" + p + "] 에 대한 채널별 검색 결과가 존재하지 않습니다.");
-    		$(".chart_trend_sub_wrap").slideUp("fast");
-    		$("body").loading("stop");
-    		return false;
-    	}
-
-    	//new SDII.Chart.chnlChart().setData(chnlResult).onDrawChart();
-
+	    	$("#chart_trend_sub").html("");
+	
+	    	var isSuccess = true;
+	
+	    	if (!chnlResult.isSuccess) {
+	    		alert("데이터 요청에 실패하였습니다.");
+	    		isSuccess = false;
+	    	}
+	
+	    	if (!chnlResult.data || chnlResult.data.length === 0) {
+	    		//if (isSuccess) alert("[" + p + " " + t + "] 에 대한 채널별 검색 결과가 존재하지 않습니다.");
+	    		if (isSuccess) alert("[" + p + "] 에 대한 채널별 검색 결과가 존재하지 않습니다.");
+	    		$(".chart_trend_sub_wrap").slideUp("fast");
+	    		$("body").loading("stop");
+	    		return false;
+	    	}
+	    	//new SDII.Chart.chnlChart().setData(chnlResult).onDrawChart();
     	
-			var fmt = "YYYY-MM-dd";
+			var fmt = "YYYY-MM-dd", i = 0;
 
-			//if (SDII.Globals.Vars.period == "mon") fmt = "YYYY-MM"
+			//if (SDII.Globals.Vars.period === "mon") fmt = "YYYY-MM"
 
 			var d = chnlResult.data;
 
 			var chartOpts = {
 				//selectionMode: "multiple",
 				aggregationTarget: "category",
-		  	lineWidth: 1,
+				lineWidth: 1,
 				pointSize: 2,
-		    pointShape: 'circle',
-		  	theme: {
-		    	chartArea: {margin:0, width: "90%", height: "80%"},
-		    },
-	      animation:{
-	      	startup: true,
-	        duration: 1000,
-	        easing: 'inAndOut',
-	      },
-		    //title: "none",
-		    titleTextStyle: {
-		    	fontSize: 20,
-		    	color: "rgba(255,255,0,0.5)",
-		    },
-				tooltip: {
-					trigger: "selection"
-				},
-		    curveType: 'function',
-		    legend: {
-		    	position: "top",
-		    	alignment: "end"
-		    },
-		    hAxis: {
-		    	 gridlines: {
-		      	color:  "none"
-		      },
-		    	format: fmt
-		    },
-		    vAxis: { 
-		      //viewWindowMode:'maximized',
-		      //textPosition: "none",
-		      viewWindow:{
-		      	//max:55,
-		        min: 0
-		      }
-		    },
-
-		    series: {
-		      0: { color: "#ef65a2", lineDashStyle: [0]},//lineDashStyle: [1, 1] },
-		      1: { color: "#a377fe", lineDashStyle: [0] },
-		      2: { color: "#d0a45f", lineDashStyle: [0] },
-		      3: { color: "#65cfc2", lineDashStyle: [0] }
-				},
-				
-		    crosshair: {
-		    	color: '#bbb',
-		    	opacity: 1,
+				pointShape: 'circle',
+		  		theme: {
+		  			chartArea: {margin:0, width: "90%", height: "80%"},
+		  		},
+		      	animation:{
+			      	startup: true,
+			        duration: 1000,
+			        easing: 'inAndOut',
+		      	},
+			    //title: "none",
+			    titleTextStyle: {
+			    	fontSize: 20,
+			    	color: "rgba(255,255,0,0.5)",
+			    },
+					tooltip: {
+						trigger: "selection"
+					},
+			    curveType: 'function',
+			    legend: {
+			    	position: "top",
+			    	alignment: "end"
+			    },
+			    hAxis: {
+			    	 gridlines: {
+			      	color:  "none"
+			      },
+			    	format: fmt
+			    },
+			    vAxis: { 
+			      //viewWindowMode:'maximized',
+			      //textPosition: "none",
+			      viewWindow:{
+			      	//max:55,
+			        min: 0
+			      }
+			    },
+		
+			    series: {
+			      0: { color: "#ef65a2", lineDashStyle: [0]},//lineDashStyle: [1, 1] },
+			      1: { color: "#a377fe", lineDashStyle: [0] },
+			      2: { color: "#d0a45f", lineDashStyle: [0] },
+			      3: { color: "#65cfc2", lineDashStyle: [0] }
+					},
+					
+			    crosshair: {
+		    		color: '#bbb',
+		    		opacity: 1,
 	 				trigger: 'both',
-	        orientation: 'both'
+	 				orientation: 'both'
 				}
 			};
-    	
-    	var n = {}; var maxCnt = 10;
-
-    	for (var i = 0; i < d.length; i++) {
-
+			
+			var n = {}; var maxCnt = 10;
+		
+			for (i = 0; i < d.length; i++) {
+		
 				var curDate = moment.unix(d[i].docDate / 1000).format("YYYY-MM-DD");
 				d[i].d = curDate;
-
+		
 				if (!n[curDate]) {
 					n[curDate] = [new Date(d[i].docDate), 0, 0, 0];
 				}
 				n[curDate][(chnlResult.cnames.indexOf(d[i].cId)) + 1] = d[i].docCntBoth;
-
+		
 				maxCnt = maxCnt < d[i].docCntBoth ? d[i].docCntBoth : maxCnt;
 			}
-
+		
 			chartOpts.vAxis.viewWindow.max = maxCnt * 1.2;
-
+		
 			var r = [], rCnt = 0;
 			for (var el in n) r[rCnt++] = n[el];
 			
 			var cIds = chnlResult.cnames;
-
+		
 			var chnData = new google.visualization.DataTable();
 			chnData.addColumn("date", "date");
-	 		for (var i = 0; i < cIds.length; i++) {
-	 			chnData.addColumn("number", cIds[i]);	
-	 		}
-	    chnData.addRows(r);
+			for (i = 0; i < cIds.length; i++) {
+				chnData.addColumn("number", cIds[i]);	
+			}
+		    chnData.addRows(r);
+		
+		    $("#chart_trend_sub").html("");
+				$("#chart_trend_sub").append("<div class='chart_trend_sub_title'>채널별 검색키워드 : " + p + "</div>");
+				$("#chart_trend_sub").append("<div id='chart_trend_sub_area'></div>");
+		
+		    var chart = new google.visualization.LineChart(document.getElementById('chart_trend_sub_area'));
+		    chart.draw(chnData, chartOpts);
+		
+		    $("body").loading("stop");
+		    return true;
+		},
 
-	    $("#chart_trend_sub").html("");
-			$("#chart_trend_sub").append("<div class='chart_trend_sub_title'>채널별 검색키워드 : " + p + "</div>");
-			$("#chart_trend_sub").append("<div id='chart_trend_sub_area'></div>");
-
-	    var chart = new google.visualization.LineChart(document.getElementById('chart_trend_sub_area'));
-	    chart.draw(chnData, chartOpts);
-
-	    $("body").loading("stop");
-    },
-
-    error: function (request, status, error) {
-    	$("body").loading("stop");
-    }
+	    error: function (request, status, error) {
+	    	$("body").loading("stop");
+	    }
 	});
-
+	return true;
 	//alert("Click Keyword : " + $(t).text());
 }
 window.channelAction = sf.channelAction;
@@ -674,7 +690,7 @@ $(document).ready(function() {
 		window.lastTime = new Date();
 	});
 	
-	checkSession();
+	//checkSession();
 
 	function checkSession () {
 		$.ajax({
@@ -718,7 +734,7 @@ $(document).ready(function() {
 		}
 		window.actTimer = setInterval(checkTime, 1000);
 	}
-		
+
 	if (!$("body").loading) {
 		location.href = location.href;
 		return false;
@@ -742,16 +758,13 @@ $(document).ready(function() {
 	$(".chart_kospi_sub_wrap").hide();
 
 	//조회기준 현재일 - 1달전 셋업
-	$fromDate = moment(new Date()).subtract(1, "months").format("YYYY-MM-DD");
+	var $fromDate = moment(new Date()).subtract(1, "months").format("YYYY-MM-DD");
 	$(".flatpickr")[0]._flatpickr.setDate($fromDate);
 	$(".flatpickr")[1]._flatpickr.setDate(new Date());
 	
 	// 테스트용 임시
-	//$(".flatpickr")[0]._flatpickr.setDate(new Date(2018, 9, 16));
-	//$(".flatpickr")[1]._flatpickr.setDate(new Date(2018, 10, 30));
-	
-	$(".flatpickr")[0]._flatpickr.setDate(new Date(2018, 8, 1));
-	$(".flatpickr")[1]._flatpickr.setDate(new Date(2018, 9, 15));
+	$(".flatpickr")[0]._flatpickr.setDate(new Date(2019, 0, 1));
+	$(".flatpickr")[1]._flatpickr.setDate(new Date(2019, 0, 15));
 	// -- 화면 버튼 이벤트 설정 시작 -- 
 
 	// 왼쪽 카드메뉴 접기 버튼 
@@ -759,7 +772,7 @@ $(document).ready(function() {
 
 		var isOpen = $(".side_container").attr("isOpen");
 
-		if (isOpen == "1") {
+		if (isOpen === "1") {
 			$(".side_container").animate({width: "toggle", opacity: 0}, 200).delay(200);		
 			$(".side_container").attr("isOpen", "0");
 			$(this).text(">");
@@ -772,9 +785,10 @@ $(document).ready(function() {
 
 	// 상단 4社명 클릭 시 해당 Insight Report로 이동 기능
 	$(".navibar_group_title").on("click", function() {
-		$tgt = $(this).attr("link-target");
+		var $tgt = $(this).attr("link-target");
 		if (!$tgt) return false;
 		location.href = pathUrl + "/" + $tgt + ".html";
+		return true;
 	});
 
 	// 상단 다음레포트 가기 버튼 (돋보기)
@@ -782,6 +796,7 @@ $(document).ready(function() {
 		var from = $(".flatpickr input[name='date_from']").val();
 		var to   = $(".flatpickr input[name='date_to']").val();
 		location.href = docBase + "/report/cus.html?from=" + from + "&to=" + to;
+		return true;
 	});
 
 	// 조회 단위 구간 설정 (일/주/월/분기/년)
@@ -789,13 +804,13 @@ $(document).ready(function() {
 		$(this).parent().find("div").removeClass("btn_range_click");
 		$(this).addClass("btn_range_click");
 
-		$curVal = $(this).attr("data-value");
+		var $curVal = $(this).attr("data-value");
 
-		if ($curVal == "day")          sv.period = "day";
-		else if ($curVal == "week")    sv.period = "week";
-		else if ($curVal == "mon")     sv.period = "mon";
-		else if ($curVal == "quarter") sv.period = "quarter";
-		else if ($curVal == "year")    sv.period = "year";
+		if ($curVal === "day")          sv.period = "day";
+		else if ($curVal === "week")    sv.period = "week";
+		else if ($curVal === "mon")     sv.period = "mon";
+		else if ($curVal === "quarter") sv.period = "quarter";
+		else if ($curVal === "year")    sv.period = "year";
 
 		//console.log("Selected Peried : " + sv.period);
 	});
@@ -812,6 +827,7 @@ $(document).ready(function() {
 			return false;
 		}
 		location.href = "/bdp/cboard/starter.jsp";
+		return true;
 	});
 
 	// 왼쪽 메뉴 카테고리명 클릭 시 이벤트
@@ -832,7 +848,7 @@ $(document).ready(function() {
 		$("#chart_trend").html(sf.getTrendLoadingText());
 		$("#ctrl_trend").html("");
 
-		if (sv.category == "4") { // 시장브리핑은 연관어 네트워크 /원문검색 없음
+		if (sv.category === "4") { // 시장브리핑은 연관어 네트워크 /원문검색 없음
 			$(".chart_network_upper_wrap").hide();
 			$(".chart_kospi_sub_wrap").show();
 			sf.onReqKospiChart(); // report_gs.js
@@ -841,7 +857,7 @@ $(document).ready(function() {
 			$(".chart_kospi_sub_wrap").hide();
 		}
 
-		if (cateNum == "5") {	// 종목브리핑은 종목검색버튼 보이기
+		if (cateNum === "5") {	// 종목브리핑은 종목검색버튼 보이기
 			$(".dashboard_trend_isu_sch").show();
 		} else {
 			$(".dashboard_trend_isu_sch").hide();	
@@ -866,7 +882,7 @@ $(document).ready(function() {
 		$("#chart_trend").html(sf.getTrendLoadingText());
 		$("#ctrl_trend").html("");
 
-		if (sv.category == "4") {
+		if (sv.category === "4") {
 			$(".chart_kospi_sub_wrap").show();
 			sf.onReqKospiChart(); // report_gs.js
 		} else {
@@ -874,14 +890,15 @@ $(document).ready(function() {
 		}
 		
 		sf.onReqAbsScrpt();
-		if (sv.category != "5") sf.onDrawTrendChart();
+		if (sv.category !== "5") sf.onDrawTrendChart();
+		return true;
 	});
 
 	//요약 스크립트 호출
 	sf.onReqAbsScrpt();
 	//트랜드 차트 호출 (구글 Lib 로딩완료 시 호출, 상단에 코드 있음)
 	//google.charts.setOnLoadCallback(SDII.Globals.Func.onDrawTrendChart);
-
+	return true;
 });
 
 })();

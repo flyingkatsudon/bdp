@@ -10,11 +10,13 @@
             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
             http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd">
 
+    <util:properties id="jdbc" location="classpath:/config.properties"/>
+    
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <property name="name" value="CBoard Meta Data"/>
-        <property name="url" value="${jdbc_url}"/>
-        <property name="username" value="${jdbc_username}"/>
-        <property name="password" value="${jdbc_password}"/>
+        <property name="url" value="${jdbc.mysql.url}"/>
+        <property name="username" value="${jdbc.mysql.username}"/>
+        <property name="password" value="${jdbc.mysql.password}"/>
         
         <property name="initialSize" value="0"/>
         <property name="maxActive" value="20"/>
@@ -33,15 +35,30 @@
         <property name="filters" value="mergeStat,log4j"/>
     </bean>
     
-    
-	<!-- multiple datasource -->
 	<bean id="postgreSqlSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.postgresql.Driver"></property>
-		<!-- <property name="url" value="jdbc:postgresql://13.209.190.240:5432/shinhan?useSSL=false&amp;serverTimezone=UTC&amp;characterEncoding=UTF-8"></property> -->
-		<property name="url" value="jdbc:postgresql://13.124.125.25:5432/shinhan?useSSL=false&amp;serverTimezone=UTC&amp;characterEncoding=UTF-8"/>
-		<!-- <property name="url" value="jdbc:postgresql://143.248.208.111:5432/shinhan?useSSL=false&amp;serverTimezone=UTC&amp;characterEncoding=UTF-8"/> -->
-		<!-- <property name="url" value="jdbc:postgresql://10.10.30.100:5432/shinhan?useSSL=false&amp;serverTimezone=UTC&amp;characterEncoding=UTF-8"/> -->
-		<property name="username" value="uiuser"/>
-		<property name="password" value="!uiuser"/>
+        <!-- <property name="url" value="#{jdbc['jdbc.postgresql.url']}"/> -->
+        <property name="username" value="#{jdbc['jdbc.postgresql.username']}"/>
+        <property name="password" value="#{jdbc['jdbc.postgresql.password']}"/>
 	</bean>
+    
+    <!-- Jasypt -->
+    <bean id="environmentVariablesConfiguration" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
+        <!-- <property name="algorithm" value="PBEWITHHMACSHA256ANDAES_256"/>
+        <property name="passwordEnvName" value="APP_ENCRYPTION_PASSWORD"/> -->
+        <property name="password" value="111111"/>
+    </bean>    
+    <bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+        <property name="config" ref="environmentVariablesConfiguration"/>
+    </bean>    
+    <bean id="propertyConfig" class="org.jasypt.spring31.properties.EncryptablePropertyPlaceholderConfigurer">
+        <constructor-arg ref="configurationEncryptor"/>
+        <!-- <property name="location">
+        	<list>
+        		<value>classpath:config.properties</value>
+        		<value>classpath:postgresql.properties</value>
+        	</list>
+        </property> -->
+        <property name="location" value="classpath:config.properties"/>
+    </bean>   
 </beans>

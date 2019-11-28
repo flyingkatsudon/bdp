@@ -44,12 +44,6 @@
  		<property name="sqlSessionFactory" ref="postgreSqlSessionFactory"/>
  	</bean>
  	
- 	<bean id="cusDocTableImpl" class="com.shinhan.biz.cus.docs.impl.CusDocTableImpl"/>
- 	<bean id="cusDocTableDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
- 		<property name="mapperInterface" value="com.shinhan.dao.CusKwdChartDAO"/>
- 		<property name="sqlSessionFactory" ref="postgreSqlSessionFactory"/>
- 	</bean>
- 	
  	<!-- GeneralAnalyticsCtrl -->
  	<bean id="generalAnalyticsBizImpl" class="com.shinhan.biz.ga.impl.GeneralAnalyticsBizImpl"/>
 </beans>

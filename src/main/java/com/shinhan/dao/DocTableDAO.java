@@ -11,12 +11,9 @@ public interface DocTableDAO {
 	
 	ArrayList<Object> getAbsScript(@Param("param") ParamVO param);
 
-	// 금투 uid 리스트 
-	ArrayList<String> getUidList(@Param("param") ParamVO param);
-	//금투-종목브리핑-요약스크립트
-	ArrayList<Object> getStockSmmryExtv(@Param("param") ParamVO param);
+	ArrayList<Object> getIsuStock(@Param("param") ParamVO param);
 	
 	ArrayList<Object> getSmmryExtv(@Param("param") ParamVO param);
 	
-	ArrayList<Object> getIsuStock(@Param("param") ParamVO param);
+	ArrayList<Object> getStockSmmryExtv(@Param("param") ParamVO param);
 }

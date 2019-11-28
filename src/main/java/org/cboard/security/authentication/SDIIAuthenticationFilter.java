@@ -15,7 +15,7 @@ import org.cboard.security.handler.LoginSuccessHandler;
 import org.cboard.util.CheckPwd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -42,13 +42,13 @@ public class SDIIAuthenticationFilter extends AbstractAuthenticationProcessingFi
 	private LoginSuccessHandler loginSuccessHandler = new LoginSuccessHandler();
 	private LoginFailureHandler loginFailureHandler = new LoginFailureHandler();
 
+	@Value("${initPwd}")
+	private String initPwd;
+	
 	public SDIIAuthenticationFilter() {
 		super(new AntPathRequestMatcher("/process", "POST"));
 	}
 
-	@Autowired
-	private CheckPwd checkPwd;
-	
 	// v0 ~ v4 유효성 검사
 	public String validation(String str) {
 		
@@ -68,8 +68,6 @@ public class SDIIAuthenticationFilter extends AbstractAuthenticationProcessingFi
 	
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
-
-		logger.info("SDIIAuthenticationFilter: {}", "attemptAuthentication");
 		
 		if (postOnly && !request.getMethod().equals("POST")) {
 			throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
@@ -83,6 +81,7 @@ public class SDIIAuthenticationFilter extends AbstractAuthenticationProcessingFi
 		user.setV0(v0);
 		user.setV1(v1);
 		user.setV2(v2);
+		user.setV3(initPwd);
 
 		user.setBusinessCode(v0);
 		user.setUserId(v1);

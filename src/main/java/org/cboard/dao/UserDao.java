@@ -39,15 +39,6 @@ public interface UserDao {
 
     int deleteUserRoles(Map<String, Object> param);
     
-    /**
-     * Author: Jeremy Kim
-     * Date: 2018.08.21
-     * 
-     * - 기존에 만들어둔 role 기본값 생성 숨기기
-     * - customUserDao에 있던 getUser userDao로 옮김
-     */
-    void addUserDefaultRole(@Param("param") User user);
-	
     User getUser(@Param("param") User param);
 
     ArrayList<Long> getResTypeList(@Param("roleId") String roleId);

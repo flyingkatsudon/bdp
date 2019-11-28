@@ -31,12 +31,6 @@ public class CustomReportCtrl {
 	private SetData setData = new SetData();
 
 	/* NEW */
-	// 위치브리핑(미사용)
-	@PostMapping("/get_doc_loc")
-	@ResponseBody
-	public Map<String, Object> getDocLoc(@RequestBody(required = false) ParamVO param) throws Exception {
-		return cusTrendChart.getDocLoc(setData.setParam(param));
-	}
 
 	// 다음레포트 트렌드차트
 	@PostMapping("/get_trd")
@@ -52,13 +46,6 @@ public class CustomReportCtrl {
 		return cusKwdChart.getKwd(setData.setParam(param));
 	}
 
-	// 키워드 네트워크
-	@PostMapping("/get_kwd_asso")
-	@ResponseBody
-	public Map<String, Object> getKwdAsso(@RequestBody ParamVO param) throws ParseException {
-		return cusKwdChart.getKwdAsso(setData.setParam(param));
-	}
-	
 	// 주차별 키워드의 연관어 (다음레포트에서 가져옴)
 	@PostMapping("/get_kwd_asso_v2")
 	@ResponseBody
@@ -67,7 +54,7 @@ public class CustomReportCtrl {
 	}
 	
 	// 세션정보
-	@RequestMapping("/get_user_info")
+	@PostMapping("/get_user_info")
 	@ResponseBody
 	public Map<String, Object> getUserInfo(HttpServletRequest request, HttpServletResponse response) {
 		return cusKwdChart.getUserInfo(request.getSession());

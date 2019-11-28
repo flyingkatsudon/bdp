@@ -54,7 +54,7 @@ public class ReportCtrl {
 		
 		// 금투-연관종목
 		ArrayList<String> fidList = new ArrayList<String>(); // 키워드 리스트 String을 list로 구분하여 저장
-		if(param.getFid() != null && param.getFid().contains(",")) { // fid에 콤마가 포함이면
+		if (param.getFid() != null && param.getFid().contains(",")) { // fid에 콤마가 포함이면
 			String[] arr = param.getFid().split(","); // 파싱
 	
 			for (int i = 0; i < arr.length; i++) {
@@ -74,25 +74,14 @@ public class ReportCtrl {
 	@ResponseBody
 	public Map<String, Object> getTrendV2(@RequestBody ParamVO param) throws ParseException {
 		// 시장브리핑 - 코스피/코스닥 지수추이
-		if(param.getFid().equals("BDPC04030205")) {
+		/*if(param.getFid().equals("BDPC04030205")) {
 			return trendChart.getMarketTrend(setData.setParam(param));
 		} else {
 			return trendChart.getTrendV2(setData.setParam(param));
-		}
+		}*/
+		return trendChart.getTrendV2(setData.setParam(param));
 	}
 
-	// 시장브리핑 - 코스피/코스닥 지수추이
-	@PostMapping("/get_market_trd")
-	@ResponseBody
-	public Map<String, Object> getMarketTrend(@RequestBody ParamVO param) throws ParseException {
-		// 시장브리핑 - 코스피/코스닥 지수추이
-		if(param.getFid().equals("BDPC04030205")) {
-			return trendChart.getMarketTrend(setData.setParam(param));
-		} else {
-			return trendChart.getTrendV2(setData.setParam(param));
-		}
-	}
-		
 	// 기간별 연관어 차트
 	@PostMapping("/get_kwd_asso")
 	@ResponseBody

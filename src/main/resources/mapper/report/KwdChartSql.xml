@@ -40,9 +40,9 @@
 					<!-- dka.KWD_A IN ('서울', '기준', '회계') -->
 						<if test="param != null">
 							<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
-							<!-- <if test="param.kwd != null">and dka.KWD_A IN (${param.kwd})</if>
+							<!-- <if test="param.kwd != null">and dka.KWD_A IN (#{param.kwd})</if>
 							<if test="param.date != null">and TO_CHAR(ka.doc_date, 'yyyy-mm-dd') = #{param.date}</if> -->
-							<if test="param.date != null">and ka.doc_date = '${param.date}'</if>
+							<if test="param.date != null">and ka.doc_date = #{param.date}::DATE </if>
 							<if test="param.kwdList.size != 0">
 								and ka.kwd_a IN
 								<foreach item="item" index="index" collection="param.kwdList" open="(" separator="," close=")">
@@ -112,7 +112,7 @@
 					<!-- ka.KWD_A IN ('서울', '기준', '회계') -->
 						<if test="param != null">
 							<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
-							<!-- <if test="param.kwd != null">and ka.KWD_A IN (${param.kwd})</if> -->
+							<!-- <if test="param.kwd != null">and ka.KWD_A IN (#{param.kwd})</if> -->
 							<if test="param.date != null">and ka.doc_date = #{param.date}::DATE </if>
 							<if test="param.kwdList.size != 0">
 								and ka.KWD_A IN
@@ -159,7 +159,7 @@
 						ka.doc_date,
 						ka.doc_cnt_both
 						<if test="param != null">
-							<if test="param.kwdList.size != 0">
+							<if test="param.kwdList != null and param.kwdList.size != 0">
 								, array_position(ARRAY
 								<foreach item="item" index="index" collection="param.kwdList" open="[" separator="," close="]">
 									#{item}
@@ -179,7 +179,7 @@
 						<!-- ka.KWD_A IN ('서울', '기준', '회계') -->
 							<if test="param != null">
 								<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
-								<!-- <if test="param.kwd != null">and ka.KWD_A IN (${param.kwd})</if> -->
+								<!-- <if test="param.kwd != null">and ka.KWD_A IN (#{param.kwd})</if> -->
 								<if test="param.date != null">and ka.doc_date = #{param.date}::DATE </if>
 								<if test="param.kwdList.size != 0">
 									and ka.kwd_a IN
@@ -246,7 +246,7 @@
 						<!-- ka.KWD_A IN ('서울', '기준', '회계') -->
 							<if test="param != null">
 								<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
-								<!-- <if test="param.kwd != null">and ka.KWD_A IN (${param.kwd})</if> -->
+								<!-- <if test="param.kwd != null">and ka.KWD_A IN (#{param.kwd})</if> -->
 								<if test="param.date != null">and ka.doc_date = #{param.date}::DATE </if>
 								<if test="param.kwdList.size != 0">
 									and ka.kwd_a IN
@@ -313,7 +313,7 @@
 						<!-- ka.KWD_A IN ('서울', '기준', '회계') -->
 							<if test="param != null">
 								<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
-								<!-- <if test="param.kwd != null">and ka.KWD_A IN (${param.kwd})</if> -->
+								<!-- <if test="param.kwd != null">and ka.KWD_A IN (#{param.kwd})</if> -->
 								<if test="param.date != null">and ka.doc_date = #{param.date}::DATE </if>
 								<if test="param.kwdList.size != 0">
 									and ka.KWD_A IN
@@ -373,7 +373,7 @@
 												<where>
 													<if test="param != null">
 														<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
-														<if test="param.date != null">and ka.doc_date = '${param.date}' </if>
+														<if test="param.date != null">and ka.doc_date = #{param.date}::DATE</if>
 														<if test="param.kwd != null"> AND ka.kwd_a = #{param.kwd} </if>
 														<if test="param.businessCode != null"> AND ka.business_code = #{param.businessCode} </if>
 													</if>
@@ -426,7 +426,7 @@
 												<where>
 													<if test="param != null">
 														<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
-														<if test="param.date != null">and ka.doc_date = '${param.date}' </if>
+														<if test="param.date != null">and ka.doc_date = #{param.date}::DATE</if>
 														<if test="param.kwd != null"> AND ka.kwd_a = #{param.kwd} </if>
 														<if test="param.businessCode != null"> AND ka.business_code = #{param.businessCode} </if>
 													</if>
@@ -479,7 +479,7 @@
 												<where>
 													<if test="param != null">
 														<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
-														<if test="param.date != null">and ka.doc_date = '${param.date}' </if>
+														<if test="param.date != null">and ka.doc_date = #{param.date}::DATE</if>
 														<if test="param.kwd != null"> AND ka.kwd_a = #{param.kwd} </if>
 														<if test="param.businessCode != null"> AND ka.business_code = #{param.businessCode} </if>
 													</if>
@@ -533,7 +533,7 @@
 												<where>
 													<if test="param != null">
 														<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
-														<if test="param.date != null">and ka.doc_date = '${param.date}' </if>
+														<if test="param.date != null">and ka.doc_date = #{param.date}::DATE</if>
 														<if test="param.kwd != null"> AND ka.kwd_a = #{param.kwd} </if>
 														<if test="param.businessCode != null"> AND ka.business_code = #{param.businessCode} </if>
 													</if>
@@ -586,7 +586,7 @@
 												<where>
 													<if test="param != null">
 														<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
-														<if test="param.date != null">and ka.doc_date = '${param.date}' </if>
+														<if test="param.date != null">and ka.doc_date = #{param.date}::DATE</if>
 														<if test="param.kwd != null"> AND ka.kwd_a = #{param.kwd} </if>
 														<if test="param.businessCode != null"> AND ka.business_code = #{param.businessCode} </if>
 													</if>
@@ -624,7 +624,7 @@
 								<if test="param.kwd != null"> AND ktc.kwd_a = #{param.kwd} </if>
 								<if test="param.startDate != null">
 									<if test="param.endDate != null">
-								 		AND ktc.doc_date BETWEEN '${param.startDate}' AND '${param.endDate}'
+								 		AND ktc.doc_date BETWEEN #{param.startDate}::DATE AND #{param.endDate}::DATE
 								 	</if> 
 								 </if>
 								<if test="param.businessCode != null">AND ktc.business_code = #{param.businessCode}</if> 
@@ -656,7 +656,7 @@
 								<if test="param.kwd != null"> AND ktc.kwd_a = #{param.kwd} </if>
 								<if test="param.startDate != null">
 									<if test="param.endDate != null">
-								 		AND ktc.doc_date BETWEEN '${param.startDate}' AND '${param.endDate}'
+								 		AND ktc.doc_date BETWEEN #{param.startDate}::DATE AND #{param.endDate}::DATE
 								 	</if> 
 								 </if>
 								<if test="param.businessCode != null">AND ktc.business_code = #{param.businessCode}</if> 
@@ -688,7 +688,7 @@
 								<if test="param.kwd != null"> AND ktc.kwd_a = #{param.kwd} </if>
 								<if test="param.startDate != null">
 									<if test="param.endDate != null">
-								 		AND ktc.doc_date BETWEEN '${param.startDate}' AND '${param.endDate}'
+								 		AND ktc.doc_date BETWEEN #{param.startDate}::DATE AND #{param.endDate}::DATE
 								 	</if> 
 								 </if>
 								<if test="param.businessCode != null">AND ktc.business_code = #{param.businessCode}</if> 
@@ -720,7 +720,7 @@
 								<if test="param.kwd != null"> AND ktc.kwd_a = #{param.kwd} </if>
 								<if test="param.startDate != null">
 									<if test="param.endDate != null">
-								 		AND ktc.doc_date BETWEEN '${param.startDate}' AND '${param.endDate}'
+								 		AND ktc.doc_date BETWEEN #{param.startDate}::DATE AND #{param.endDate}::DATE
 								 	</if> 
 								 </if>
 								<if test="param.businessCode != null">AND ktc.business_code = #{param.businessCode}</if> 
@@ -752,7 +752,7 @@
 								<if test="param.kwd != null"> AND ktc.kwd_a = #{param.kwd} </if>
 								<if test="param.startDate != null">
 									<if test="param.endDate != null">
-								 		AND ktc.doc_date BETWEEN '${param.startDate}' AND '${param.endDate}'
+								 		AND ktc.doc_date BETWEEN #{param.startDate}::DATE AND #{param.endDate}::DATE
 								 	</if> 
 								 </if>
 								<if test="param.businessCode != null">AND ktc.business_code = #{param.businessCode}</if> 

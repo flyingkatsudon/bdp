@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	
-(function() {
+(function(global) {
 	
 	var posNegAssoChart = function(cnt, p, kwdSet) {
 		this.container = p;
@@ -27,20 +27,20 @@ $(document).ready(function() {
 					negxAxis = [],
 					negyAxis = [];
 			
-			var kwds = this.kwdSet.split(",");
-			var kwdA = kwds[0];
-			var kwdB = kwds[0];
+			//var kwds = this.kwdSet.split(",");
+			//var kwdA = kwds[0];
+			//var kwdB = kwds[0];
 			var pMax = 0;
 			var nMin = 0;
 
 			for (var i = 0; i < data.length; i++) {
 
-				if (data[i].sentiFlag == "POS") {
+				if (data[i].sentiFlag === "POS") {
 					posxAxis.push(data[i].kwdSentiValue);
 					posyAxis.push(data[i].kwd);
 					if (data[i].kwdSentiValue > pMax) pMax = data[i].kwdSentiValue;
 
-				} else if (data[i].sentiFlag == "NEG") {
+				} else if (data[i].sentiFlag === "NEG") {
 					negxAxis.push(data[i].kwdSentiValue);
 					negyAxis.push(data[i].kwd);	
 					if (data[i].kwdSentiValue < nMin) nMin = data[i].kwdSentiValue;
@@ -152,6 +152,8 @@ $(document).ready(function() {
 			basicOption.series[0].data=data.neg.xAxis;
 			basicOption.series[0].itemStyle = {color:'#ff5663'};
 			negChart.setOption(basicOption);
+			
+			return true;
 		}
 	};
 	

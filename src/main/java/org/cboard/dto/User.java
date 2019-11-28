@@ -4,18 +4,13 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Created by yfyuan on 2016/9/29.
  */
 
-/**
- * Author: Jeremy Kim 
- * Date: 2018.08.31
- * 
- * extends Role
- */
-public class User extends Role  {
+public class User extends Role {
 
 	private String userId;
 	private String userPassword;
@@ -28,6 +23,7 @@ public class User extends Role  {
 	private String userStateInfo;
 	
 	private String oldUserPassword;
+	private String checkPassword;
 	private String loginIp;
 	
 	private String delCd;
@@ -40,14 +36,22 @@ public class User extends Role  {
 		this.loginIp = loginIp;
 	}
 	
+	public String getCheckPassword() {
+		return checkPassword;
+	}
+
+	public void setCheckPassword(String checkPassword) {
+		this.checkPassword = checkPassword;
+	}
+
 	public String getOldUserPassword() {
 		return oldUserPassword;
 	}
-	
+
 	public void setOldUserPassword(String oldUserPassword) {
 		this.oldUserPassword = oldUserPassword;
 	}
-	
+
 	public User() {
 
 	}
@@ -144,6 +148,11 @@ public class User extends Role  {
 	}
 	
 	public String getUserName() {
+		return userName;
+	}
+	
+	@Override
+	public String getUsername() {
 		return userName;
 	}
 

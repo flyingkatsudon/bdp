@@ -62,48 +62,6 @@ public class CusKwdChartImpl implements CusKwdChart {
 		return map;
 	}
 
-	// 키워드 네트워크
-	@Override
-	public Map<String, Object> getKwdAsso(ParamVO param) {
-
-		Map<String, Object> map = new HashMap<String, Object>();
-
-		ArrayList<Object> list = new ArrayList<Object>();
-		
-		switch(param.getPeriod()) {
-		case "day":
-			list = cusKwdChartDAO.getKwdAsso(param);
-			break;
-		case "week":
-			list = cusKwdChartDAO.getWeeklyKwdAsso(param);
-			break;
-		case "mon":
-			list = cusKwdChartDAO.getMonthlyKwdAsso(param);
-			break;
-		case "quarter":
-			list = cusKwdChartDAO.getQuarterlyKwdAsso(param);
-			break;
-		case "year":
-			list = cusKwdChartDAO.getYearlyKwdAsso(param);
-			break;
-		default:
-			list = cusKwdChartDAO.getKwdAsso(param);
-		}
-		
-		try {
-			map.put("data", setKwdAsso(list));
-			map.put("isSuccess", true);
-
-		} catch (Exception e) {
-			map.put("isSuccess", false);
-			e.printStackTrace();
-		}
-	
-		map.put("requestDate", new Timestamp(System.currentTimeMillis()));
-
-		return map;
-	}
-	
 	// 주차별 키워드의 연관어 (다음레포트에서 가져옴)
 	@Override
 	public Map<String, Object> getKwdAssoV2(ParamVO param) {
@@ -131,7 +89,7 @@ public class CusKwdChartImpl implements CusKwdChart {
 		list = cusKwdChartDAO.getWeeklyKwdAssoV2(param);
 		
 		try {
-			map.put("data", setKwdAssoV2(list));
+			map.put("data", setKwd(list));
 			map.put("isSuccess", true);
 
 		} catch (Exception e) {
@@ -165,14 +123,6 @@ public class CusKwdChartImpl implements CusKwdChart {
 		}
 		
 		return result;
-	}
-	
-	public ArrayList<Map<String, Object>> setKwdAsso(ArrayList<Object> list) {
-		return setKwd(list);		
-	}
-	
-	public ArrayList<Map<String, Object>> setKwdAssoV2(ArrayList<Object> list) {
-		return setKwd(list);		
 	}
 	
 	@Override

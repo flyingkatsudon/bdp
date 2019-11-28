@@ -40,12 +40,6 @@ public class BaseController {
 
 		String url = request.getRequestURL().toString();
 
-		/**
-		 * Author: Jeremy Kim 
-		 * Date: 2018.08.23
-		 * 
-		 * 현재 사용자를 Session에서 가져옴
-		 */
 		user = authenticationService.getCurrentUser();
 
 		String log = new CBoardActionLog(user, url).toString();

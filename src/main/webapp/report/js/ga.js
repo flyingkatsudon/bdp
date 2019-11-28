@@ -1,4 +1,13 @@
+
 (function() {
+
+window.uniq = function (list) {
+    var result = [];
+    $.each(list, function(i, e) {
+        if ($.inArray(e, result) == -1) result.push(e);
+    });
+    return result;
+}
 
 window.onInitDetlSearch = function() {
 
@@ -35,10 +44,11 @@ window.onInitDetlSearch = function() {
 			.replace(/(\[AND\])+/gi, "^")
 			.replace(/(\[OR\])+/gi, ",")
 			.replace(/(\[NOT\])+/gi, "#")
+			.replace(/\s+/gi, "^")
 			.split(/(\^|\,|\#)/gi);
-
+		
 		for (var i = 0; i < kwdList.length; i++) {
-			if (kwdList[i] == "^" || kwdList[i] == "," || kwdList[i] == "#") continue;
+			if (kwdList[i] === "^" || kwdList[i] === "," || kwdList[i] === "#") continue;
 			kwdList[i] = "(" + kwdList[i] + ")";
 		}
 		
@@ -92,7 +102,7 @@ window.onInitDetlSearch = function() {
 
 			console.log(realData);
 
-			if (!res || !res.response || !res.response.docs || res.response.docs.length == 0) {
+			if (!res || !res.response || !res.response.docs || res.response.docs.length === 0) {
 				alert("조회된 결과가 없습니다.");
 				$(".api_container").hide();
 				return false;
@@ -143,11 +153,14 @@ window.onInitDetlSearch = function() {
 				var param = getApiParam();
 				if (!param) return false;
 				param.analyticsCode = "A001";
+				
 				$("#download_form input").each(function(idx, el) {
 				  $(el).val(encodeURIComponent(param[el.name]));
 				});
 
 				$("#download_form").attr("action", SDII.Url + "/ga/call_general_analytics_excel").submit();
+
+				return true;
 			});
 
 			$(".api_container").show();
@@ -155,23 +168,181 @@ window.onInitDetlSearch = function() {
 		} catch(e) {
 			console.log(e);
 			alert("JSON에 문제가 발생하였습니다.");
-			return;
+			return false;
 		}
 	}
+	
+	function onDrawA002(result) {
+		
+		var temp = {};
+  		
+  		var data = JSON.parse(result.data);
+  		
+  		console.log(data);
+  		
+  		if (!data.response || !data.response.docs || data.response.docs.length === 0) {
+  			alert("조회되는 데이터가 없습니다.")
+  			return false;
+  		}
+  	
+  		var drawData = {};
+  		var i = 0;
+  		for (i = 0; i < data.response.docs.length; i++) {
+  			var curDocs = data.response.docs[i];
+  			var curCont = curDocs.mContent;
+  			var $c   = curCont.split(" ");
+  			$c.forEach(function(el, idx) {
+	  		  var d = el.split("/");
+	  		  //console.log("key: " + d[0] + "/value: " + d[1]);
+	  		  if (!drawData[d[1]]) drawData[d[1]] = [];
+	  		drawData[d[1]].push(d[0]);
+	  		});
+	  		console.log(drawData);
+  		}
+  		
+  		if (Object.keys(drawData).length == 0) return false;
+  		
+  		
+  		$(".analytics_container").show();
 
+  		$(".analytics_title").text("형태소 분석결과");
+  		
+  		var $parent = $(".analytics_list_wrap");
+  		$parent.html("");
+  		
+  		
+  		for (var el in drawData) {
+  			
+  			$parent
+  				.append($("<div style='font-size:18px;font-weight:bold'>" + el + "</div>"))
+  				.append($("<div>" + uniq(drawData[el]).join(", ") + "<div>"))
+  				.append($("<hr/>"));
+  		}
+	}
+	
+	function onDrawA003(result) {
+		
+		function classes(root) {
+			
+			var classes = [];
+	
+			function recurse(name, node) {
+				if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
+				else classes.push({packageName: name, className: node.name, value: node.size});
+			}
+	
+			recurse(null, root);
+			return {children: classes};
+		}
+		
+		var temp = {};
+  		
+  		var data = JSON.parse(result.data);
+  		
+  		console.log(data);
+  		
+  		if (!data.response || !data.response.docs || data.response.docs.length === 0) {
+  			alert("조회되는 데이터가 없습니다.")
+  			return false;
+  		}
+  		
+  		var docs = data.response.docs,
+  			idxArr = {},
+  			idxCnt = 0
+  			r    = {
+	  			name: "root",
+	  			children: []
+	  		}, 
+	  		i = 0;
+  		
+  		for (i = 0; i < docs.length; i++) {
+  			
+  			if (idxArr[docs[i].pos_tag] !== undefined) continue;
+  			
+  			r.children[idxCnt] = {
+				name: docs[i].pos_tag,
+				children: []
+			};
+  			//console.log("Set [" + docs[i].pos_tag + "] index to" + idxCnt);
+  			idxArr[docs[i].pos_tag] = idxCnt;
+  			idxCnt += 1;
+  		}
+
+  		for (i = 0; i < docs.length; i++) {
+  			
+  			if (docs[i].word_count < 3) continue;
+  			
+  			var targetIdx = idxArr[docs[i].pos_tag];
+  			
+  			r.children[targetIdx].children.push({
+  				name: docs[i].word, 
+  				size: docs[i].word_count * 2
+			});
+  		}
+  		/*
+  		domain: "news"
+  		pos_tag: "NNG"
+  		word: "수소"
+  		word_count: 68
+  		word_length: "2"
+  		*/
+  		
+  		$(".analytics_container").show();
+	  	$(".analytics_list_wrap").html("");
+	  	$(".analytics_title").text("키워드빈도 분석결과");
+	  	
+  		var diameter = 960,
+	  	    format = d3.format(",d"),
+	  	    color = d3.scaleOrdinal(d3.schemeCategory20c);
+	
+	  	var bubble = d3.pack()
+	  	    .size([diameter, diameter])
+	  	    .padding(1.5);
+	
+	  	var svg = d3.select(".analytics_list_wrap").append("svg")
+	  	    .attr("width", diameter)
+	  	    .attr("height", diameter)
+	  	    .attr("class", "bubble");
+	  	
+	    var root = d3.hierarchy(classes(r))
+	      .sum(function(d) { return d.value; })
+	      .sort(function(a, b) { return b.value - a.value; });
+
+	    bubble(root);
+	    var node = svg.selectAll(".node")
+	    	.data(root.children)
+			.enter().append("g")
+			.attr("class", "node")
+			.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+	    node.append("title")
+	    	.text(function(d) { return d.data.className + ": " + format(d.value / 2); });
+
+	    node.append("circle")
+	      	.attr("r", function(d) { return d.r; })
+	      	.style("fill", function(d) { 
+	      		return color(d.data.packageName); 
+      	});
+
+	    node.append("text")
+	    	.attr("dy", ".3em")
+	    	.style("text-anchor", "middle")
+	    	.text(function(d) { return d.data.className.substring(0, d.r / 3); });
+	}
+	
 	function calcSlctBox(t, keyName, target) {
 
 		target     = "";
-		$calcTemp  = [];
+		var $calcTemp  = [];
 
 		$(t).parent().children().each(function(idx, el) {
 			$(el).removeClass("cate_box_click");
 		});
 
-		$selectYn = $(t).attr("select");
+		var $selectYn = $(t).attr("select");
 
 		$(t).attr("select", "N");		
-		if (!$selectYn || $selectYn == "N") $(t).attr("select", "Y");		
+		if (!$selectYn || $selectYn === "N") $(t).attr("select", "Y");		
 
 		$(t).parent().find("div[select=Y]").each(function(idx, el) {
 			$(el).addClass("cate_box_click");
@@ -202,9 +373,9 @@ window.onInitDetlSearch = function() {
 	sv.slctSns    = "";
 	sv.slctApi    = "";
 
-	$p = $(".search_container");
+	var $p = $(".search_container");
 
-	if ($p.length == 0) return;
+	if ($p.length === 0) return false;
 
 	// 검색범위, 검색기간
 	$(".search_ctrl_btn").on("click", function() {
@@ -221,9 +392,9 @@ window.onInitDetlSearch = function() {
 				$(el).removeClass("cate_box_click");
 			});
 
-			$selectYn = $(this).attr("select");
+			var $selectYn = $(this).attr("select");
 			$(this).attr("select", "N");		
-			if (!$selectYn || $selectYn == "N") $(this).attr("select", "Y");
+			if (!$selectYn || $selectYn === "N") $(this).attr("select", "Y");
 			$(this).addClass("cate_box_click");
 			sv.schPart = $(this).attr("ctrl-part");
 
@@ -231,26 +402,28 @@ window.onInitDetlSearch = function() {
 		}
 
 		// 검색기간 
-		$toDay = moment(new Date);
-		$range = $(this).attr("ctrl-range");
-		$from  = "";
-		$to    = moment(new Date).format("YYYY-MM-DD");
+		//var $toDay = moment(new Date);
+		var $range = $(this).attr("ctrl-range");
+		var $from  = "";
+		var $to    = moment(new Date).format("YYYY-MM-DD");
 
-		if ($range == "week") {
+		if ($range === "week") {
 			$from = moment(new Date).subtract(7, "days").format("YYYY-MM-DD");
 			
-		} else if ($range == "mon") {
+		} else if ($range === "mon") {
 			$from = moment(new Date).subtract(1, "months").format("YYYY-MM-DD");
-		} else if ($range == "mon3") {
+		} else if ($range === "mon3") {
 			$from = moment(new Date).subtract(3, "months").format("YYYY-MM-DD");
-		} else if ($range == "mon6") {
+		} else if ($range === "mon6") {
 			$from = moment(new Date).subtract(6, "months").format("YYYY-MM-DD");
-		} else if ($range == "year") {
+		} else if ($range === "year") {
 			$from = moment(new Date).subtract(1, "years").format("YYYY-MM-DD");
 		}
 
 		$(".flatpickr.detl_pickr")[0]._flatpickr.setDate($from);
 		$(".flatpickr.detl_pickr")[1]._flatpickr.setDate($to);
+		
+		return true;
 
 	});
 
@@ -267,15 +440,15 @@ window.onInitDetlSearch = function() {
 	}
 	$(".nsrc").text(sv.newsMeta.length);
 	$(".cate_news_all_btn").on("click", function() {		
-		$selectYn = $(this).attr("select");
+		var $selectYn = $(this).attr("select");
 		$(this).attr("select", "N");		
-		if (!$selectYn || $selectYn == "N") $(this).attr("select", "Y");		
+		if (!$selectYn || $selectYn === "N") $(this).attr("select", "Y");		
 
-		if ($(this).attr("select") == "Y") {
+		if ($(this).attr("select") === "Y") {
 			$(this).css("background-color", "#666666");
 			sv.slctAll  = "Y";
 			sv.slctNews = "";
-			$tempCalc   = [];
+			var $tempCalc   = [];
 			$(".cate_news_wrap").children().each(function(idx, el) {
 				$(el).addClass("cate_box_click");
 				$(el).attr("select", "Y");
@@ -300,15 +473,15 @@ window.onInitDetlSearch = function() {
 	$(".cate_sns_all_btn").on("click", function() {
 
 		sv.slctSns = "";
-		$selectYn = $(this).attr("select");
+		var $selectYn = $(this).attr("select");
 
 		$(this).attr("select", "N");		
-		if (!$selectYn || $selectYn == "N") $(this).attr("select", "Y");
+		if (!$selectYn || $selectYn === "N") $(this).attr("select", "Y");
 
-		if ($(this).attr("select") == "Y") {
+		if ($(this).attr("select") === "Y") {
 			$(this).css("background-color", "#666666");
 			sv.slctSns = "";
-			$tempCalc   = [];
+			var $tempCalc   = [];
 			$(".cate_sns_wrap").children().each(function(idx, el) {
 				$(el).addClass("cate_box_click");
 				$(el).attr("select", "Y");
@@ -344,16 +517,18 @@ window.onInitDetlSearch = function() {
 		
 		$(".api_container").hide();		
 		var isSimpleSch = $(this).hasClass("btn_search_simple_btn");
-
+		
+		sv.slctApi = "A001";
+		
 		if (isSimpleSch) {
 			$(".cate_api_box").each(function(idx, el) { 
 				$(el).removeClass("cate_box_click"); 
 			});
-			sv.slctApi = "A001";
 		}
 
 		$(".btn_detl_opt").click();
 		$(".docs_list_conatiner").hide();
+		$(".analytics_container").hide();
 
 		var param = getApiParam();
 		if (!param) return false;
@@ -363,27 +538,29 @@ window.onInitDetlSearch = function() {
 		$.ajax({
 			url: SDII.Url + "/ga/call_general_analytics_api",
 			type: 'post',
-	    contentType: 'application/json; charset=utf-8',
+			contentType: 'application/json; charset=utf-8',
 			dataType: 'json',
 			data: JSON.stringify(param),
 			success: function(result) {
 
 				$("body").loading("stop");
 
-		  	if (!result.isSuccess) {
-		  		alert("데이터 요청에 실패하였습니다.");
-		  		return;
-		  	}
-
-		  	if (sv.slctApi == "A001") {
-			  	$(".docs_list_conatiner").show();
-					onDrawPatternSearchRes(result);	
-		  	} else {
-		  		console.log(result);
-		  	}
-	    }
-		});
+			  	if (!result.isSuccess) {
+			  		alert("데이터 요청에 실패하였습니다.");
+			  		return false;
+			  	}
 	
+			  	if (sv.slctApi === "A001") {
+				  	$(".docs_list_conatiner").show();
+						onDrawPatternSearchRes(result);	
+			  	} else {
+			  		console.log(result);
+			  	}
+			  	return true;
+		    }
+		});
+		
+		return true;
 	});
 
 	$(".sch_part").first().click();
@@ -392,7 +569,8 @@ window.onInitDetlSearch = function() {
 	$(".cate_api_box").first().click();
 
 	$(".docs_list_conatiner").hide();
-
+	$(".analytics_container").hide();
+	
 	$("input[name=search_kwd").on("focus", function() {
 		//$(".detl_wrap").slideDown("fast");
 	});
@@ -418,19 +596,21 @@ window.onInitDetlSearch = function() {
 		if (!opts) return false;
 		
 		var optKwd = "[AND]";
-		if (opts == 1) optKwd = "[OR]";
-		if (opts == 2) optKwd = "[NOT]";
+		if (opts === "1") optKwd = "[OR]";
+		if (opts === "2") optKwd = "[NOT]";
 
 		$("input[name=search_kwd").val($("input[name=search_kwd").val() + optKwd);
 		$("input[name=search_kwd").focus();
+		
+		return true;
 	});
 
 	$("input[name=search_kwd]").on("keydown", function() {
 
-		if (event.keyCode == 13) { 
+		if (event.keyCode === 13) { 
 			$(".btn_search_simple_btn").click();
-			return false; 
 		}
+		return true;
 	});
 
 	$(".btn_insight_report").on("click", function() {
@@ -440,60 +620,65 @@ window.onInitDetlSearch = function() {
 	$(".go_starter_btn").on("click", function() {
 		location.href = "/bdp/cboard/starter.jsp";
 	});
-}
-
-window.timer = null;
-$(document).ready(function() {
-
-	$("body").on("mousemove keydown", function() {
-		window.lastTime = new Date();
-	});
 	
-	checkSession();
-
-	function checkSession () {
+	$(".btn_start_analytics").on("click", function() {
+		
+		var apiCode = sv.slctApi;
+		
+		if (!apiCode) return false;
+		
+		var param = getApiParam();
+		if (!param) return false;
+		
+		$("body").loading();
+		
 		$.ajax({
-			url: '/bdp/sm/checksn',
-			type : 'POST',
-        	contentType: 'application/json; charset=utf-8',
-			//data: JSON.stringify({userId: userId}),
-			success: function(res) {
-				//var res = JSON.parse(response);		
-				if (res.status) return false;
-				var prefix = "";
-				if (res.loginIp) prefix = res.loginIp + "에서 ";
+			url: SDII.Url + "/ga/call_general_analytics_api",
+			type: 'post',
+			contentType: 'application/json; charset=utf-8',
+			dataType: 'json',
+			data: JSON.stringify(param),
+			success: function(result) {
 				
-				alert(prefix + "중복 로그인 되어 로그아웃 됩니다.");
-				location.href = "/bdp/logout";
-			}, 
-			error: function(res) {
-				alert("세션 검증에 실패하여 로그아웃 됩니다.");
-				window.location.href = '/bdp/logout';
+				var param = getApiParam();
+				if (!param) return false;
+				
+				$("body").loading("stop");
+
+			  	if (!result.isSuccess) {
+			  		alert("데이터 요청에 실패하였습니다.");
+			  		return false;
+			  	}
+	
+			  	if (sv.slctApi === "A001") {
+				  	$(".docs_list_conatiner").show();
+					onDrawPatternSearchRes(result);
+			  	} else if (sv.slctApi === "A002") { // 형태소분석
+					onDrawA002(result);
+			  	} else if (sv.slctApi === "A003") { // 키워드빈도
+			  		onDrawA003(result);
+			  	} else if (sv.slctApi === "A008") { // 키워드빈도
+			  		var data = JSON.parse(result.data);
+			  		debugger;
+			  	} else {
+			  		console.log(JSON.parse(result.data));
+			  	}
+			  	return true;
 			},
-			complete: function(){
-				if (window.timer) clearInterval(window.timer);
-				window.timer = setInterval(checkSession, 1000);
+			error: function(request, status, error) {
+				$("body").loading("stop");
+				console.log("code: " + request.status + "\nerror: " + error);
+				alert("데이터 요청에 실패하였습니다..");
 			}
 		});
-	}
+		
+		return true;
+	});
 	
-	window.lastTime = new Date();
-	checkTime();
+	return true;
+}
 
-	function checkTime() {
-		
-		if (window.actTimer) clearInterval(window.actTimer);
-		var curTime = new Date();
-		var subtrs  = Math.ceil((curTime - lastTime) / 1000);
-		
-		if (subtrs > 1800) {
-			alert('30분 이상 응답이 없어 자동 로그아웃 됩니다');
-			location.href = "/bdp/logout";
-			return false;
-		}
-		window.actTimer = setInterval(checkTime, 1000);
-	}
-	
+$(document).ready(function() {
 	//$("body").loading({ message: '데이터 조회중 입니다'});
 	$(".flatpickr").flatpickr({locale : "ko", wrap: true});
 

@@ -82,16 +82,6 @@ public class AdminController extends BaseController {
     @Autowired
     private DatasourceService datasourceService;
 
-    
-    /**
-     * Author: Jeremy Kim
-     * Date: 2018.09.03
-     * 
-     * user_id에 UUID 대신에 login_name과 동일한 값 insert (2018.08.21)
-     * addUser에 roleId 생성하여 parameter로 추가(그룹사-부서-팀)
-     * 
-     * */
-    
     @RequestMapping(value = "/saveNewUser")
     public String saveNewUser(@RequestParam(name = "user") String user) {
         JSONObject jsonObject = JSONObject.parseObject(user);
@@ -118,12 +108,6 @@ public class AdminController extends BaseController {
         return list;
     }
 
-    /**
-     * Author: Jeremy Kim
-     * Date: 2018.09.03
-     * 
-     * Role 자동 등록
-     * */
     @RequestMapping(value = "/saveRole")
     public String saveRole(@RequestParam(name = "role") String role) {
         JSONObject jsonObject = JSONObject.parseObject(role);

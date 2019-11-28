@@ -31,7 +31,7 @@
         <!-- Adm -->
         <!-- <sec:authorize access="hasAuthority('1') or hasAuthority('2')"> -->
         <li class="treeview" ui-sref-active="active" ng-if="isShowMenu('admin.user')">
-            <a href="http://13.209.38.43:8180/adm">
+            <a href="http://localhost:8180/adm">
                 <i class="fa fa-th"></i>
                 <span>{{'SIDEBAR.ADMIN_PAGE'|translate}}</span>
                 <span class="pull-right-container">
@@ -41,7 +41,7 @@
         </li>
         <!-- </sec:authorize> -->
         <li class="treeview" ui-sref-active="active" ng-if="isShowMenu('bdp.insight')">
-            <a href="http://13.209.38.43:8080/bdp">
+            <a href="http://localhost:8080/bdp">
                 <i class="fa fa-th"></i>
                 <span>{{'SIDEBAR.INSIGHT_REPORT'|translate}}</span>
                 <span class="pull-right-container">
@@ -51,7 +51,7 @@
             </a>
         </li>
         <li class="treeview" ui-sref-active="active" ng-if="isShowMenu('bdp.g_analysis')">
-            <a href="http://13.209.38.43:8080/bdp/report/ga.html">
+            <a href="http://localhost:8080/bdp/report/ga.html">
                 <i class="fa fa-th"></i>
                 <span>{{'SIDEBAR.G_ANALYSIS'|translate}}</span>
                 <span class="pull-right-container">

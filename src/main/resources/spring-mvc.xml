@@ -37,10 +37,7 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/" />
-			<mvc:exclude-mapping path="/signUp" />
-			<mvc:exclude-mapping path="/register" />
 			<mvc:exclude-mapping path="/sm/**"/>
-			<mvc:exclude-mapping path="/cpw"/>
 			<mvc:exclude-mapping path="/update"/>
 			<mvc:exclude-mapping path="/process"/>
 			<mvc:exclude-mapping path="/fail"/>

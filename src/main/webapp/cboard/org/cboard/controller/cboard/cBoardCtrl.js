@@ -9,14 +9,6 @@ cBoard.controller('cBoardCtrl', function ($rootScope, $scope, $location, $http, 
         ModalUtils.alert(msg);
     };
 
-    /**
-     * Author: Jeremy Kim
-     * Date: 2018.08.20
-     * 
-     * main-header.html에 정보를 표시하는데에 쓰임
-     * - user 객체를 세션에 넣으면 필요없을 것으로 보여짐
-     * 
-     * */
     $http.get("/bdp/cboard/commons/getUserDetail").success(function (response) {
 	    var avatarUrl = '/bdp/cboard/dist/img/user-male-circle-blue-128.png';
         $scope.user = response;

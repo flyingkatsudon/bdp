@@ -117,6 +117,12 @@ public class GeneralAnalyticsCtrl {
 			} else {
 				param.setBusinessCode(vo.getBusinessCode());
 			}
+
+			if (vo.getPress() == null || vo.getPress().equals("")) {
+				param.setPress(null);
+			} else {
+				param.setPress(vo.getBusinessCode());
+			}
 			
 			if (vo.getVersion() == null || vo.getVersion().equals("")) {
 				param.setVersion("0.1");
@@ -136,6 +142,7 @@ public class GeneralAnalyticsCtrl {
 		logger.info("currendPage: " + param.getCurrentPage());
 		logger.info("section: " + param.getSection());
 		logger.info("businessCode: " + param.getBusinessCode());
+		logger.info("press: " + param.getPress());
 		logger.info("version: " + param.getVersion() + "\n");
 		
 		logger.info("jobId: " + param.getJobId());
@@ -163,7 +170,11 @@ public class GeneralAnalyticsCtrl {
 	@ResponseBody
 	public void getXlsx(@ModelAttribute ParamGaVO param, HttpServletResponse res) throws Exception {
 		String oriKwd = param.getSearchPattern();
+		String section = param.getSection();
 		param.setSearchPattern(URLDecoder.decode(oriKwd, "UTF-8"));
+		if (section != null)
+			param.setSection(URLDecoder.decode(section, "UTF-8"));
+
 		try {
 			generalAnalyticsBiz.getAnalyticsXlsx(setParam(param), res);
 		} catch (Throwable e) {

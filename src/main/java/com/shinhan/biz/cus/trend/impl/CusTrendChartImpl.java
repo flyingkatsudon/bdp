@@ -65,43 +65,6 @@ public class CusTrendChartImpl implements CusTrendChart {
 		return map;
 	}
 
-	@Override
-	public Map<String, Object> getDocLoc(ParamVO param) throws Exception {
-
-		if (param.getCnt() == null || param.getCnt().equals("-1")) {
-			param.setCnt("100");
-		}
-
-		if (param.getDate() == null) {
-			//param.setDate("2018-09-05");
-			param.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-		}
-
-		// 입력받은 날짜의 이전 하루 데이터 포함
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(new SimpleDateFormat("yyyy-mm-dd").parse(param.getDate()));
-		cal.add(Calendar.DAY_OF_YEAR, -1); // 이전 1일
-
-		// 입력받은 날짜가 없다면 오늘 날짜를 조회 마감일로
-		param.setStartDate(new SimpleDateFormat("yyyy-mm-dd").format(cal.getTime()));
-		param.setEndDate(param.getDate());
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-
-		try {
-			map.put("data", cusTrendChartDAO.getDocLoc(param));
-			map.put("isSuccess", true);
-
-		} catch (Exception e) {
-			map.put("isSuccess", false);
-			e.printStackTrace();
-		}
-
-		map.put("requestDate", new Timestamp(System.currentTimeMillis()));
-
-		return map;
-	}
-
 	public ArrayList<Map<String, Object>> setCusTrend(ArrayList<Object> list) {
 
 		ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();

@@ -27,7 +27,7 @@
     	var pathUrl = docBase + "/cus";
     	
     	window.SDII = {
-    		Url    : isDev ? "http://13.209.38.43:8080/report" : "http://13.209.38.43:8080/bdp",
+    		Url    : isDev ? "/report" : "/bdp",
     		Chart  : {}, 
   			Globals: {
     			Func: {},
@@ -203,6 +203,14 @@
 	  	<br/>
 	  	<div class="doc_list_wrap"></div>
 	  </div>
+	  
+  	  <div class="analytics_container box_shadow mt15">
+	  	<div class="d-flex justify-content-between">
+	  		<div class="title_main analytics_title">분석결과</div>	
+	  	</div>
+	  	<br/>
+	  	<div class="analytics_list_wrap"></div>
+	  </div>
 
 	  <div class="search_container api_container box_shadow mt15">
 	  	<br/>
@@ -237,6 +245,7 @@
 			<input type="hidden" name="currentPage"   value=""/>
 			<input type="hidden" name="limitCnt"      value=""/>
 			<input type="hidden" name="pageCnt"       value=""/>
+			<input type="hidden" name="section"       value="100,101,102,103"/>
 		</form>
 
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -254,9 +263,12 @@
 
 		<!-- CUS 외부 라이브러리 임포트 -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.1.0/echarts.min.js"></script>
-
+	
+		<script src="https://d3js.org/d3.v4.js"></script>
+		
 		<!-- CUS 차트스크립트 임포트 -->
 		<script src="js/ga.js"></script>
+		
   </body>
 </html>
 

@@ -43,12 +43,6 @@ public final class UserDetailsService extends AbstractCasAssertionUserDetailsSer
                 NON_EXISTENT_PASSWORD_VALUE,
                 true, true, true, true,
                 grantedAuthorities);
-        /**
-         * Author: Jeremy Kim
-         * Date: 2018.08.31
-         * 
-         * company, department 삭제
-         * */
         user.setUserId((String) assertion.getPrincipal().getAttributes().get("employee"));
         user.setName(assertion.getPrincipal().getName());
         userDao.saveNewUser(user.getUserId(), user.getUsername(), user.getName());

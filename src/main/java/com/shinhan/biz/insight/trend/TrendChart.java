@@ -12,9 +12,6 @@ public interface TrendChart {
 	// 채널별 확산 new
 	public Map<String, Object> getTrendV2(ParamVO param);
 
-	// 시장브리핑 - 코스피/코스닥 지수추이
-	public Map<String, Object> getMarketTrend(ParamVO param);
-	
 	// 종목브리핑 - 연관종목
 	public Map<String, Object> getRelStock(ParamVO param);
 

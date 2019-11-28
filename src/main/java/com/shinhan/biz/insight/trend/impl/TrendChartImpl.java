@@ -239,45 +239,6 @@ public class TrendChartImpl implements TrendChart {
 		return map;
 	}
 	
-	// 시장브리핑 - 코스피/코스닥 지수추이
-	@Override
-	public Map<String, Object> getMarketTrend(ParamVO param) {
-
-		Map<String, Object> map = new HashMap<String, Object>();
-		ArrayList<Object> list = new ArrayList<Object>();
-		
-		if(param.getPeriod() != null) {
-			switch(param.getPeriod()) {
-			case "time":
-				list = trendChartDAO.getNrtMarketTrend(param);
-				break;
-			case "day":
-				list = trendChartDAO.getMarketTrend(param);
-				break;
-			default:
-				list = trendChartDAO.getMarketTrend(param);
-			}
-		} else {
-			list = trendChartDAO.getMarketTrend(param);
-		}
-		
-		try {
-			map.put("data", setMarketTrend(list));
-			map.put("isSuccess", true);
-
-		} catch (Exception e) {
-			map.put("isSuccess", false);
-			e.printStackTrace();
-		}
-		
-		String[] cnames = {"KOSPI", "KOSDAQ"};
-		map.put("cnames", cnames);
-		
-		map.put("requestDate", new Timestamp(System.currentTimeMillis()));
-		
-		return map;
-	}
-	
 	// 종목브리핑 - 연관종목
 	@Override
 	public Map<String, Object> getRelStock(ParamVO param) {
@@ -311,12 +272,9 @@ public class TrendChartImpl implements TrendChart {
 					
 					System.out.println("KEYWORD#2 : " + param.getKwdList());
 					stockKwds = trendChartDAO.getStockKwdTrendV3(param);
-					System.out.println("XXXXXXXXXXXXXXXXXXXXXXXX" + stockKwds.size());
 				} else {
 					param.setFid(fid); // 306
 					isuRelKwds = trendChartDAO.getIsuRelKwds(param);
-
-					System.out.println("XXXXXXXXXXXXXXXXXXXXXXXX" + isuRelKwds.size());
 				}
 			}
 			break;
@@ -425,66 +383,6 @@ public class TrendChartImpl implements TrendChart {
 		}
 		
 		return list;
-	}
-		
-	// 금투 - 종목브리핑 - 연관종목
-	public Map<String, Object> setRelStock(Map<String, Object> map, ArrayList<Object> list, ArrayList<String> cnames) {
-
-		if(list != null && list.size() > 0) {
-			
-			int max = ((DailyKwdTrendCntV2VO) list.get(0)).getDocCntBoth();
-			int min = ((DailyKwdTrendCntV2VO) list.get(0)).getDocCntBoth();
-			
-			Date date = ((DailyKwdTrendCntV2VO) list.get(list.size() - 1)).getDocDate();
-	
-			ArrayList<DailyKwdTrendCntV2VO> tmp = new ArrayList<DailyKwdTrendCntV2VO>(); // 쿼리 결과
-	
-			for (Object o : list) {
-				DailyKwdTrendCntV2VO vo = (DailyKwdTrendCntV2VO) o;
-	
-				// max, min
-				if (vo.getDocCntBoth() >= max)
-					max = vo.getDocCntBoth();
-				if (vo.getDocCntBoth() <= min)
-					min = vo.getDocCntBoth();
-	
-				// cname
-				if (vo.getDocDate().compareTo(date) == 0) {
-					if (vo.getRn() == 1)
-						tmp.add(vo);
-				}
-			}
-	
-			map.put("data", setKwdTrend(list));
-	
-			map.put("max", max);
-			map.put("min", min);
-	
-			// cname 추가
-			int cnameMax = tmp.get(0).getDocCntBoth();
-			int loc = 0;
-	
-			for (int j = 0; j < tmp.size(); j++) {
-				if (cnameMax <= tmp.get(j).getDocCntBoth()) {
-					cnameMax = tmp.get(j).getDocCntBoth();
-					loc = j;
-				}
-			}
-			
-			map.put("cname", tmp.get(loc).getKwdA());
-			
-		} else {
-			map.put("data", new ArrayList<DailyKwdTrendCntV2VO>());
-	
-			map.put("max", 0);
-			map.put("min", 0);
-			
-			map.put("cname", null);
-		}
-		
-		map.put("cnames", cnames);
-		
-		return map;
 	}
 	
 	// 트렌드차트

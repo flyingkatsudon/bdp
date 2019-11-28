@@ -5,9 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
 			http://www.springframework.org/schema/beans/spring-beans.xsd
 			http://www.springframework.org/schema/security 
-			http://www.springframework.org/schema/security/spring-security.xsd
-			http://www.springframework.org/schema/context
-			http://www.springframework.org/schema/context/spring-context.xsd">
+			http://www.springframework.org/schema/security/spring-security.xsd">
 
 	<!-- <security:http pattern="/" security="none"/> -->
 	
@@ -17,9 +15,6 @@
 	</security:http>
 	
     <security:http auto-config="true">
-    	<!-- <security:intercept-url pattern="/" access="permitAll"/>
-    	<security:intercept-url pattern="/register" access="permitAll"/> -->
-
     	<security:intercept-url pattern="/cboard/lib/**" access="permitAll"/>
         <security:intercept-url pattern="/cboard/dist/**" access="permitAll"/>
         <security:intercept-url pattern="/cboard/bootstrap/**" access="permitAll"/>

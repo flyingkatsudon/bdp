@@ -29,7 +29,7 @@
 						<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
 						<if test="param.startDate != null">
 							<if test="param.endDate != null">
-						 		AND ka.doc_date BETWEEN '${param.startDate}' AND '${param.endDate}'
+						 		AND ka.doc_date BETWEEN #{param.startDate}::DATE AND #{param.endDate}::DATE
 						 	</if> 
 						 </if>
 						<if test="param.kwd != null"> AND ka.kwd_a = #{param.kwd} </if>
@@ -67,7 +67,7 @@
 						<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
 						<if test="param.startDate != null">
 							<if test="param.endDate != null">
-						 		AND ka.doc_date BETWEEN '${param.startDate}' AND '${param.endDate}'
+						 		AND ka.doc_date BETWEEN #{param.startDate}::DATE AND #{param.endDate}::DATE
 						 	</if> 
 						 </if>
 						<if test="param.kwd != null"> AND ka.kwd_a = #{param.kwd} </if>
@@ -104,7 +104,7 @@
 						<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
 						<if test="param.startDate != null">
 							<if test="param.endDate != null">
-						 		AND ka.doc_date BETWEEN '${param.startDate}' AND '${param.endDate}'
+						 		AND ka.doc_date BETWEEN #{param.startDate}::DATE AND #{param.endDate}::DATE
 						 	</if> 
 						 </if>
 						<if test="param.kwd != null"> AND ka.kwd_a = #{param.kwd} </if>
@@ -141,7 +141,7 @@
 						<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
 						<if test="param.startDate != null">
 							<if test="param.endDate != null">
-						 		AND ka.doc_date BETWEEN '${param.startDate}' AND '${param.endDate}'
+						 		AND ka.doc_date BETWEEN #{param.startDate}::DATE AND #{param.endDate}::DATE
 						 	</if> 
 						 </if>
 						<if test="param.kwd != null"> AND ka.kwd_a = #{param.kwd} </if>
@@ -178,7 +178,7 @@
 						<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
 						<if test="param.startDate != null">
 							<if test="param.endDate != null">
-						 		AND ka.doc_date BETWEEN '${param.startDate}' AND '${param.endDate}'
+						 		AND ka.doc_date BETWEEN #{param.startDate}::DATE AND #{param.endDate}::DATE
 						 	</if> 
 						 </if>
 						<if test="param.kwd != null"> AND ka.kwd_a = #{param.kwd} </if>
@@ -218,7 +218,7 @@
 							<if test="param.fid != null"> AND ka.fid = #{param.fid} </if>
 							<if test="param.startDate != null">
 								<if test="param.endDate != null">
-						 			AND ka.doc_date BETWEEN '${param.startDate}' AND '${param.endDate}'
+						 			AND ka.doc_date BETWEEN #{param.startDate}::DATE AND #{param.endDate}::DATE
 							 	</if> 
 							 </if>
 							<if test="param.kwd != null"> AND ka.kwd_a = #{param.kwd} </if>

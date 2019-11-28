@@ -27,12 +27,6 @@ import java.util.stream.Collectors;
 @Repository
 public class AdminSerivce {
 
-	/**
-	 * Author: Jeremy Kim
-	 * Date: 2018.08.21
-	 * 
-	 * - @Value("${admin_user_id:1}) 수정
-	 * */
     @Value("${admin_user_id}")
     private String adminUid;
 
@@ -51,14 +45,6 @@ public class AdminSerivce {
     @Autowired
     private BoardDao boardDao;
 
-    /**
-     * Author: Jeremy Kim
-     * Date: 2018.09.03
-     * 
-     * user.setUserId(userId) -> user.setUserId(loginName) 으로 교체 (2018.08.21)
-     * addUser 메서드 register 쿼리에 연결
-     * 
-     * */
     public String addUser(String userId, String loginName, String userName, String userPassword, String roleId) {
         
         User user = new User();

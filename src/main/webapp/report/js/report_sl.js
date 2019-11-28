@@ -38,6 +38,8 @@ $(document).ready(function() {
 		$(".chart_trend_menu").hide();
 
 		sf.onDrawTrendChart(inpVal);
+		
+		return true;
 	});	
 });
 

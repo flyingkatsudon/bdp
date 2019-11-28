@@ -17,6 +17,14 @@ public class ParamGaVO extends ParamVO {
 	private String businessCode;
 	private String version;
 	
+	private String press;
+	
+	public String getPress() {
+		return press;
+	}
+	public void setPress(String press) {
+		this.press = press;
+	}
 	public String getVersion() {
 		return version;
 	}
@@ -89,12 +97,13 @@ public class ParamGaVO extends ParamVO {
 	public void setSection(String section) {
 		this.section = section;
 	}
+	
 	@Override
 	public String toString() {
 		return "ParamGaVO [searchPattern=" + searchPattern + ", startDate=" + startDate + ", endDate=" + endDate
 				+ ", searchData=" + searchData + ", categoryCode=" + categoryCode + ", section=" + section
 				+ ", analyticsCode=" + analyticsCode + ", limitCnt=" + limitCnt + ", pageCnt=" + pageCnt
-				+ ", currentPage=" + currentPage + ", businessCode=" + businessCode + ", version=" + version + "]";
+				+ ", currentPage=" + currentPage + ", businessCode=" + businessCode + ", version=" + version
+				+ ", press=" + press + "]";
 	}
-	
 }

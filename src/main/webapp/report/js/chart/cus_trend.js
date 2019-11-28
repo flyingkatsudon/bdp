@@ -1,7 +1,7 @@
 //update on 11.01
 $(document).ready(function() {
 	
-(function() {
+(function(global) {
 	
 	var cusTrendChart = function() {
 		this.sourceArr = [];
@@ -13,7 +13,7 @@ $(document).ready(function() {
 			
 			this.sourceArr = [];
 
-			if (!trendDataset || !trendDataset.data || trendDataset.data.length == 0) {
+			if (!trendDataset || !trendDataset.data || trendDataset.data.length === 0) {
 				return this;
 			}
 			var sourceArr    = [];
@@ -24,31 +24,30 @@ $(document).ready(function() {
 			var categoryArr4 = ['BLOG'];
 			//var categoryArr5 = ['ETC'];
 			
+			var i = 0;
 			// data pre-process
 			// 1. sort date
 			trendDataset.data = trendDataset.data.sort(function(a, b) {return a['docDate'] - b['docDate'];});
 			
 			// 2. Timestamp --> date
-			for(var i = 0; i < trendDataset.data.length; i++) {
+			for (i = 0; i < trendDataset.data.length; i++) {
 				trendDataset.data[i].docDate = moment(trendDataset.data[i].docDate).format("YY/MM/DD");
 			}
 			
 			// 3. dateArr
-			for(var i = 0; i < trendDataset.data.length; i++) {
-				if (!trendDataset.data[i] || !trendDataset.data[i].categoryCode) {
-					continue;
-				}
-				if(i == 0) {
+			for (i = 0; i < trendDataset.data.length; i++) {
+				if (!trendDataset.data[i] || !trendDataset.data[i].categoryCode) continue;
+				if(i === 0) {
 					dateArr.push(trendDataset.data[i].docDate);
 				} else {
-					if(trendDataset.data[i-1].docDate != trendDataset.data[i].docDate) {
+					if(trendDataset.data[i-1].docDate !== trendDataset.data[i].docDate) {
 						dateArr.push(trendDataset.data[i].docDate);
 					}
 				}
 			}
 			
 			// 4. categoryArr1,2,3,4,5
-			for(var i = 1; i < dateArr.length; i++) {
+			for (i = 1; i < dateArr.length; i++) {
 				//0을 집어넣음
 				categoryArr1.push(0);
 				categoryArr2.push(0);
@@ -62,10 +61,14 @@ $(document).ready(function() {
 						continue;
 					}
 					
-					if((trendDataset.data[j].categoryCode == 1) && (trendDataset.data[j].docDate == dateArr[i])) {
+					if((trendDataset.data[j].categoryCode === "1") && (trendDataset.data[j].docDate === dateArr[i])) {
 						categoryArr1[i] = trendDataset.data[j].docCntBoth;
-					} else if((trendDataset.data[j].categoryCode == 2) && (trendDataset.data[j].docDate == dateArr[i])) {
+					} else if((trendDataset.data[j].categoryCode === "2") && (trendDataset.data[j].docDate === dateArr[i])) {
 						categoryArr2[i] = trendDataset.data[j].docCntBoth;
+					} else if((trendDataset.data[j].categoryCode === "3") && (trendDataset.data[j].docDate === dateArr[i])) {
+						categoryArr3[i] = trendDataset.data[j].docCntBoth;
+					} else if((trendDataset.data[j].categoryCode === "4") && (trendDataset.data[j].docDate === dateArr[i])) {
+						categoryArr4[i] = trendDataset.data[j].docCntBoth;
 					}
 				}
 			}
@@ -79,6 +82,7 @@ $(document).ready(function() {
 			
 			this.sourceArr = sourceArr; 
 			
+			console.log(this.sourceArr);
 			return this;
 		},
 		
@@ -88,9 +92,9 @@ $(document).ready(function() {
 			
 			$("#trend").attr("_echarts_instance_", "");
 			
-			if (!that.sourceArr || this.sourceArr.length == 0) {
+			if (!that.sourceArr || this.sourceArr.length === 0) {
 				$("#trend").html("검색된 데이터가 없습니다.");
-				return;
+				return false;
 			}
 			
 			var sourceArr = that.sourceArr;
@@ -154,7 +158,7 @@ $(document).ready(function() {
 			        var xAxisInfo = event.axesInfo[0];
 			        if (xAxisInfo) {
 			            var dimension = xAxisInfo.value + 1;
-			            if (xAxisInfo.value == undefined || xAxisInfo.value == null) return false;
+			            if (xAxisInfo.value === undefined || xAxisInfo.value === null) return false;
 			            myTrend.setOption({
 			            	 	//grid: {x: '3%', y: '3%', width: '50%', height: '50%'},
 			                series: {
@@ -171,14 +175,15 @@ $(document).ready(function() {
 			                
 			            });//setoption end
 			        }
+			        return true;
 			    });//function end
 
 			    myTrend.setOption(option);
-
 			    setTimeout(function(){
 			    	  $("body").loading("stop");
 		    	}, 100);
 			}, 10);
+			return true;
 		}
 	};
 	

@@ -39,14 +39,13 @@
 			request.getSession().setAttribute("starter", "starter");
 			request.getSession().setAttribute("changePwd", null);
 			
-			// 은카금생: SH, LC, GS, SL 순(골드윙 계정 생성 규칙에 적힌 순서)
 			String businessCode = user.getBusinessCode();
 		
-			if(businessCode != null) {
+			/* if(businessCode != null) {
 				if(businessCode.equals("SY")) response.sendRedirect("report/sh.html");
 				else response.sendRedirect("report/" + businessCode.toLowerCase() + ".html");
-			}
-			//response.sendRedirect("cboard/starter.jsp");
+			} */
+			response.sendRedirect("cboard/starter.jsp");
 		}
 	}
 %>
@@ -66,7 +65,6 @@ $(document).ready(function(){
 	var names = $('#names').val().split(',');
 	var options = '';
 	
-	console.log(getCookie('businessCode'));
 	$('#businessCode').change(function(){
 		$('input[name=v1]').val('');
 		$('input[name=v2]').val('');
@@ -108,10 +106,6 @@ $(document).ready(function(){
 
 	  }
 	}
-	
-	$('input[type=submit]').click(function(){
-		
-	});
 });
 </script>
 </head>
@@ -139,17 +133,6 @@ $(document).ready(function(){
 						<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 				</div>
 				<div class="row">
-					<!-- <div class="col-xs-12" id="col-mid">
-						<div class="checkbox icheck">
-							<label> <input type="checkbox" name="remember_me"
-								value="true"> Remember Me
-							</label>
-						</div>
-					</div> -->
-					<!-- /.col -->
-					<!-- <div class="col-xs-6">
-						<a href="/bdp/signUp" class="btn btn-primary btn-block btn-flat">Sign Up</a>
-					</div> -->
 					<div class="col-xs-12">
 						<input type="submit" class="btn btn-primary btn-block btn-flat"
 							value="로그인" />

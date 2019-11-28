@@ -76,7 +76,7 @@
 					dm.script_rel_docs_std_info std
 				<where>
 					<if test="param != null">
-						<if test="param.date != null"> AND TO_CHAR(std.script_date, 'yyyy-mm-dd') = #{param.date} </if>
+						<if test="param.date != null"> AND TO_CHAR(std.script_date, 'yyyy-mm-dd') = #{param.date}</if>
 						<if test="param.categoryCode != null"> AND LEFT(std.category_code, 5) = #{param.categoryCode} </if>
 						<if test="param.businessCode != null"> AND std.business_code = #{param.businessCode} </if>
 						<if test="param.jobId != null"> AND std.job_id = #{param.jobId} </if>

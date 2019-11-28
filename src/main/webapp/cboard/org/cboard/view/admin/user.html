@@ -89,13 +89,6 @@
                 </div>
                 <div class="box-body">
                     <form>
-                    <!--
-                    	Author: Jeremy Kim
-                    	Date: 2018.08.21
-                    	
-                    	사용자 정보 입력 시 curUser.loginName을 curUser.userId로 교체 
-                    	cboard.json에서 ADMIN.USER.USER_ID 추가
-                     -->
                         <div class="form-group">
                             <!-- <label>{{'ADMIN.USER.LOGIN_NAME'|translate}}</label>
                             <input ng-model="curUser.loginName" class="form-control"/> -->
@@ -110,40 +103,6 @@
                             <label>{{'ADMIN.USER.PASSWORD'|translate}}</label>
                             <input ng-model="curUser.userPassword" class="form-control" type="password"/>
                         </div>
-                        
-                       <!--
-                       	Author: Jeremy Kim
-                       	Date: 2018.09.03
-                       
-                       	사용자 추가 시 Role id 작성 
-                       -->
-                        <!-- <div class="form-group">
-                            <label>Group</label>
-                            <select ng-model="curUser.v4" class="form-control" name="v4">
-								<option value="AA" selected>신한금융투자</option>
-								<option value="AB">신한생명</option>
-								<option value="AC">신한은행</option>
-								<option value="AD">신한카드</option>
-							</select>
-                        </div>
-                        <div class="form-group">
-                            <label>Department</label>
-							<select ng-model="curUser.v5" class="form-control" name="v5">
-								<option value="B1">부서1</option>
-								<option value="B2">부서2</option>
-								<option value="B3">부서3</option>
-								<option value="B4">부서4</option>
-							</select>
-                        </div>
-                        <div class="form-group">
-                            <label>Team</label>
-							<select ng-model="curUser.v6" class="form-control" name="v6">
-								<option value="01">팀1</option>
-								<option value="02">팀2</option>
-								<option value="03">팀3</option>
-								<option value="04">팀4</option>
-							</select>
-                        </div> -->
                     </form>
                 </div>
                 <!-- /.box-body -->
@@ -162,12 +121,6 @@
                 <div class="box-body">
                     <form>
                         <div class="form-group">
-                        <!-- 
-                        	Author: Jeremy Kim
-                        	Date: 2018.09.03
-                        	
-                        	role 추가 시 그룹사 코드 
-                         -->
                             <label>{{'ADMIN.ROLE.ROLE_NAME'|translate}}</label>
                             <input ng-model="curRole.roleName" class="form-control"/>
                         </div>

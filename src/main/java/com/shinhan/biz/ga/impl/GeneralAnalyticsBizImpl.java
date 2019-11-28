@@ -1,6 +1,8 @@
 package com.shinhan.biz.ga.impl;
 
 import java.io.File;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,10 +27,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.owlnest.ANALYTICS_BDP_API;
+import com.owlnest.util.IpCheckExternal;
 import com.shinhan.biz.ga.GeneralAnalyticsBiz;
 import com.shinhan.vo.ParamGaVO;
 
 public class GeneralAnalyticsBizImpl implements GeneralAnalyticsBiz {
+
+	private static final Logger logger = LoggerFactory.getLogger(GeneralAnalyticsBizImpl.class);
 	
 	@Override
 	public Map<String, Object> getAnalyticsDocs(ParamGaVO param) throws Throwable {
@@ -36,9 +41,21 @@ public class GeneralAnalyticsBizImpl implements GeneralAnalyticsBiz {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		String currentSvr = "143.248.208.110"; // dev
+		//String currentSvr = "143.248.208.110"; // dev
 		//String currentSvr = "13.209.126.208"; //aws
-		//String currentSvr = "10.10.30.27"; // private
+		String currentSvr = "10.10.30.27"; // private
+		
+		IpCheckExternal ipc = new IpCheckExternal();
+		String userName = System.getProperty("user.name");
+		String hostName = InetAddress.getLocalHost().getHostName();
+		InetAddress addr = InetAddress.getLocalHost();
+		String hostIp = null;
+		
+		try {
+			hostIp = ipc.getIp();
+		} catch (UnknownHostException e) {
+			hostIp = addr.getHostAddress();
+		}
 		
 		try {
 			Date startTime = new Date();
@@ -47,50 +64,77 @@ public class GeneralAnalyticsBizImpl implements GeneralAnalyticsBiz {
 			int pageCnt = 0;
 			int currentPage = 0;
 			
-			if(param.getLimitCnt() == null) limitCnt = 10;
-			else limitCnt = Integer.parseInt(param.getLimitCnt());
+			if (param.getLimitCnt() == null) 
+				limitCnt = 10;
+			else 
+				limitCnt = Integer.parseInt(param.getLimitCnt());
 			
-			if(param.getPageCnt() == null) pageCnt = 20;
-			else pageCnt = Integer.parseInt(param.getPageCnt());
+			if (param.getPageCnt() == null) 
+				pageCnt = 20;
+			else 
+				pageCnt = Integer.parseInt(param.getPageCnt());
 			
-			if(param.getCurrentPage() == null) currentPage = -1;  
-			else currentPage = Integer.parseInt(param.getCurrentPage());
+			if (param.getCurrentPage() == null)
+				currentPage = -1;  
+			else 
+				currentPage = Integer.parseInt(param.getCurrentPage());
 			
 			String output = "";
+			Integer port  = 43001;
 			
 			switch(param.getAnalyticsCode()) {
 			case "A001":
-				output = ANALYTICS_BDP_API.A001(currentSvr, 43001, param.getSearchPattern(), param.getStartDate(), param.getEndDate(), Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode(), param.getSection(), limitCnt, pageCnt, currentPage);
+				output = ANALYTICS_BDP_API.A001(currentSvr, port, param.getSearchPattern(), param.getStartDate(), param.getEndDate()
+						, Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode()
+						, userName, hostName, hostIp, param.getSection(), param.getPress(), limitCnt, pageCnt, currentPage);
 				break;
 			case "A002":
-				output = ANALYTICS_BDP_API.A002(currentSvr, 43002, param.getSearchPattern(), param.getStartDate(), param.getEndDate(), Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode(), param.getSection(), limitCnt, pageCnt, currentPage);
+				output = ANALYTICS_BDP_API.A002(currentSvr, port, param.getSearchPattern(), param.getStartDate(), param.getEndDate()
+						, Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode()
+						, userName, hostName, hostIp, param.getSection(), param.getPress(), limitCnt, pageCnt, currentPage);
 				break;
 			case "A003":
-				output = ANALYTICS_BDP_API.A003(currentSvr, 43003, param.getSearchPattern(), param.getStartDate(), param.getEndDate(), Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode(), param.getSection(), limitCnt, pageCnt, currentPage);
+				output = ANALYTICS_BDP_API.A003(currentSvr, port, param.getSearchPattern(), param.getStartDate(), param.getEndDate()
+						, Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode()
+						, userName, hostName, hostIp, param.getSection(), param.getPress(), limitCnt, pageCnt, currentPage);
 				break;
 			case "A004":
-				output = ANALYTICS_BDP_API.A004(currentSvr, 43004, param.getSearchPattern(), param.getStartDate(), param.getEndDate(), Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode(), param.getSection(), limitCnt, pageCnt, currentPage);
+				output = ANALYTICS_BDP_API.A004(currentSvr, port, param.getSearchPattern(), param.getStartDate(), param.getEndDate()
+						, Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode()
+						, userName, hostName, hostIp, param.getSection(), param.getPress(), limitCnt, pageCnt, currentPage);
 				break;
 			case "A005":
-				output = ANALYTICS_BDP_API.A005(currentSvr, 43005, param.getSearchPattern(), param.getStartDate(), param.getEndDate(), Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode(), param.getSection(), limitCnt, pageCnt, currentPage);
+				output = ANALYTICS_BDP_API.A005(currentSvr, port, param.getSearchPattern(), param.getStartDate(), param.getEndDate()
+						, Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode()
+						, userName, hostName, hostIp, param.getSection(), param.getPress(), limitCnt, pageCnt, currentPage);
 				break;
 			case "A006":
-				output = ANALYTICS_BDP_API.A006(currentSvr, 43006, param.getSearchPattern(), param.getStartDate(), param.getEndDate(), Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode(), param.getSection(), limitCnt, pageCnt, currentPage);
+				output = ANALYTICS_BDP_API.A006(currentSvr, port, param.getSearchPattern(), param.getStartDate(), param.getEndDate()
+						, Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode()
+						, userName, hostName, hostIp, param.getSection(), param.getPress(), limitCnt, pageCnt, currentPage);
 				break;
 			case "A007":
-				output = ANALYTICS_BDP_API.A007(currentSvr, 43007, param.getSearchPattern(), param.getStartDate(), param.getEndDate(), Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode(), param.getSection(), param.getVersion(), limitCnt, pageCnt, currentPage);
+				output = ANALYTICS_BDP_API.A007(currentSvr, port, param.getSearchPattern(), param.getStartDate(), param.getEndDate()
+						, Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode(), param.getVersion()
+						, userName, hostName, hostIp, param.getSection(), param.getPress(), limitCnt, pageCnt, currentPage);
 				break;
 			case "A008":
-				output = ANALYTICS_BDP_API.A008(currentSvr, 43008, param.getSearchPattern(), param.getStartDate(), param.getEndDate(), Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode(), param.getSection(), limitCnt, pageCnt, currentPage);
+				output = ANALYTICS_BDP_API.A008(currentSvr, port, param.getSearchPattern(), param.getStartDate(), param.getEndDate()
+						, Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode()
+						, userName, hostName, hostIp, param.getSection(), param.getPress(), limitCnt, pageCnt, currentPage);
 				break;
 			case "A009":
-				output = ANALYTICS_BDP_API.A009(currentSvr, 43009, param.getSearchPattern(), param.getStartDate(), param.getEndDate(), Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode(), param.getSection(), limitCnt, pageCnt, currentPage);
+				output = ANALYTICS_BDP_API.A009(currentSvr, port, param.getSearchPattern(), param.getStartDate(), param.getEndDate()
+						, Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode()
+						, userName, hostName, hostIp, param.getSection(), param.getPress(), limitCnt, pageCnt, currentPage);
 				break;
 			case "A010":
-				output = ANALYTICS_BDP_API.A010(currentSvr, 43010, param.getSearchPattern(), param.getStartDate(), param.getEndDate(), Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode(), param.getSection(), limitCnt, pageCnt, currentPage);
+				output = ANALYTICS_BDP_API.A010(currentSvr, port, param.getSearchPattern(), param.getStartDate(), param.getEndDate()
+						, Integer.parseInt(param.getSearchData()), param.getBusinessCode(), param.getCategoryCode()
+						, userName, hostName, hostIp, param.getSection(), param.getPress(), limitCnt, pageCnt, currentPage);
 				break;
 			}
-			
+
 			Date endTime = new Date();
 			long lTime = (endTime.getTime() - startTime.getTime());
 
@@ -103,7 +147,8 @@ public class GeneralAnalyticsBizImpl implements GeneralAnalyticsBiz {
 				map.put("hasDocs", false);
 			} else {
 				// 조회 성공
-				map.put("data", output);
+				//map.put("data",  new Gson().fromJson(output, Object.class));
+				map.put("data",  output);
 				map.put("hasDocs", true);
 			}
 			map.put("isSuccess", true);
@@ -117,13 +162,12 @@ public class GeneralAnalyticsBizImpl implements GeneralAnalyticsBiz {
 
 		return map;
 	}
-
-	private static final Logger logger = LoggerFactory.getLogger(GeneralAnalyticsBizImpl.class);
 	
 	@Override
 	public void getAnalyticsXlsx(ParamGaVO param, HttpServletResponse res) throws Exception {
 
 		String output = "";
+		
 		try {
 			output = getAnalyticsDocs(param).get("data").toString();
 
