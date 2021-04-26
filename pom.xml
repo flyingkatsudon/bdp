@@ -19,7 +19,7 @@
         <presto.version>0.161</presto.version>
         <h2.version>1.4.196</h2.version>
 		<poi.version>3.16</poi.version>
-		<commons-io.version>2.5</commons-io.version>
+		<commons-io.version>2.7</commons-io.version>
         <lombok.version>1.16.16</lombok.version>
     </properties>
  
@@ -110,7 +110,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.5</version>
+            <version>2.7</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis</groupId>
